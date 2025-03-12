@@ -8,6 +8,6 @@ pipe = pipeline(model_path,
                 chat_template_config=ChatTemplateConfig(model_name='llama3'))
 image_path = "./assets/test/naruto.jpeg"
 image = load_image(image_path)
-response = pipe(('describe this image', image))
+response = pipe(('The characters in this image are both Uzumaki Naruto from anime Naruto, now describe this image', image))
 print(response)
 
