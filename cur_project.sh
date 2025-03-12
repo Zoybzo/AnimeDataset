@@ -1,3 +1,3 @@
 #!/bin/bash
 
-export PYTHONPROJECT="./"
+export PYTHONPATH="./:$PYTHONPATH"
