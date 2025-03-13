@@ -16,6 +16,9 @@ raw_image = Image.open(img_path).convert('RGB')
 question = "describe this image in detail"
 inputs = processor(raw_image, question, return_tensors="pt")
 
+print("generating describe")
 out = model.generate(**inputs)
+print(out[0])
 print(processor.decode(out[0], skip_special_tokens=True).strip())
+
 
