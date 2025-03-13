@@ -9,7 +9,7 @@ model_path = "Salesforce/blip2-opt-2.7b"
 processor = Blip2Processor.from_pretrained(model_path, local_files_only=True)
 model = Blip2ForConditionalGeneration.from_pretrained(model_path, local_files_only=True)
 
-image_path = "./assets/test/naruto.jpeg"
+img_path = "./assets/test/naruto.jpeg"
 # img_url = 'https://storage.googleapis.com/sfr-vision-language-research/BLIP/demo.jpg' 
 raw_image = Image.open(img_path).convert('RGB')
 
