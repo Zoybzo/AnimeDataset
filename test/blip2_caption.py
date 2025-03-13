@@ -11,7 +11,7 @@ model = Blip2ForConditionalGeneration.from_pretrained(model_path, local_files_on
 
 image_path = "./assets/test/naruto.jpeg"
 # img_url = 'https://storage.googleapis.com/sfr-vision-language-research/BLIP/demo.jpg' 
-raw_image = Image.open(img_url).convert('RGB')
+raw_image = Image.open(img_path).convert('RGB')
 
 question = "describe this image in detail"
 inputs = processor(raw_image, question, return_tensors="pt")
