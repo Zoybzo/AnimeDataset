@@ -1,5 +1,6 @@
 from scenedetect import open_video, SceneManager, ContentDetector
 from scenedetect.detectors import AdaptiveDetector
+from scenedetect.video_splitter import split_video_ffmpeg
 
 
 # 打开视频文件
@@ -22,3 +23,9 @@ scene_list = scene_manager.get_scene_list()
 for i, scene in enumerate(scene_list):
     print(f"场景 {i+1}: 开始时间 {scene[0].get_timecode()} / 帧数 {scene[0].get_frames()}, "
           f"结束时间 {scene[1].get_timecode()} / 帧数 {scene[1].get_frames()}")
+
+
+# 分割视频
+output_file_template = name.split('.')[0] + "_scene_$SCENE_NUMBER.mkv"
+split_video_ffmpeg(video_path, scene_list, 
+                   output_file_template=output_file_template, show_progress=True)
