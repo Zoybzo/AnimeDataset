@@ -1,6 +1,6 @@
 from diffusers import CogView4Pipeline
 
-pipe = CogView4Pipeline.from_pretrained("THUDM/CogView4-6B", torch_dtype=torch.bfloat16)
+pipe = CogView4Pipeline.from_pretrained("THUDM/CogView4-6B", torch_dtype=torch.bfloat16, local_files_only=True)
 
 # Open it for reduce GPU memory usage
 pipe.enable_model_cpu_offload()
