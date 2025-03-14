@@ -5,7 +5,7 @@ class Trainer:
     def prepare_models(self):
         pass
 
-    def train(self,):
+    def train(self):
         pass
 
     def validate(self):
@@ -13,5 +13,3 @@ class Trainer:
 
     def fit(self):
         pass
-
-
