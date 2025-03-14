@@ -7,7 +7,7 @@ pipe = StableDiffusionXLPipeline.from_pretrained(
     "cagliostrolab/animagine-xl-4.0",
     torch_dtype=torch.float16,
     use_safetensors=True,
-    custom_pipeline="lpw_stable_diffusion_xl",
+    # custom_pipeline="lpw_stable_diffusion_xl",
     add_watermarker=False,
     local_files_only=True,
 )
