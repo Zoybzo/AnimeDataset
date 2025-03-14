@@ -1,4 +1,7 @@
+import os
+
 from smb.SMBConnection import SMBConnection
+
 
 # 配置文件路径
 config_path = os.path.expanduser("./.private/smb.toml")
