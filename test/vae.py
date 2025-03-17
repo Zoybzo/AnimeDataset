@@ -29,7 +29,7 @@ image_tensor = (
 logger.debug(f"image_tensor.shape: {image_tensor.shape}")
 sample = vae.forward(image_tensor)
 logger.debug(f"sample: {sample}")
-sample = sample["sample"].to(dtype=torch.bfloat16)
+sample = sample["sample"].to(dtype=torch.float32)
 logger.debug(f"sample.shape: {sample.shape}")
 rec_image = to_pil_image(sample)
 rec_image.save("./assets/test/vae_naruto.png")
