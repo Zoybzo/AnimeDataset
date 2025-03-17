@@ -18,6 +18,7 @@ vae = AutoencoderKL.from_pretrained(
 # load image
 img_path = "./assets/test/naruto.jpeg"
 raw_image = Image.open(img_path).convert("RGB")
+logger.debug(f"raw_image: {raw_image.shape}")
 # 创建转换器对象
 transform = transforms.ToTensor()
 to_pil_image = transforms.ToPILImage()
@@ -28,7 +29,7 @@ image_tensor = (
 logger.debug(f"image_tensor.shape: {image_tensor.shape}")
 sample = vae.forward(image_tensor)
 logger.debug(f"sample: {sample}")
-sample = sample["sample"]
+sample = sample["sample"].to(dtype=torch.bfloat16)
 logger.debug(f"sample.shape: {sample.shape}")
 rec_image = to_pil_image(sample)
 rec_image.save("./assets/test/vae_naruto.png")
