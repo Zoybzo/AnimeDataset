@@ -1,4 +1,4 @@
-from diffusers import CogView4Pipeline
+from diffusers import CogView4Pipeline, AutoencoderKL
 import torch
 
 vae = AutoencoderKL.from_pretrained(
