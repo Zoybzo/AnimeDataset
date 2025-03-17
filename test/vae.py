@@ -3,6 +3,8 @@ from torchvision import transforms
 import torch
 from PIL import Image
 
+from loguru import logger
+
 vae = AutoencoderKL.from_pretrained(
     "THUDM/CogView4-6B",
     torch_dtype=torch.bfloat16,
@@ -23,7 +25,8 @@ to_pil_image = transforms.ToPILImage()
 image_tensor = (
     transform(raw_image).unsqueeze(0).to(device="cuda:0", dtype=torch.bfloat16)
 )
-latent_dist = vae.encode(image_tensor)
-sample = vae.decode(latent_dist)
+logger.debug(f"image_tensor.shape: {image_tensor.shape}")
+sample = vae.forward(image_tensor)
+logger.debug(f"sample: {sample}")
 rec_image = to_pil_image(sample)
 rec_image.save("./assets/test/vae_naruto.png")
