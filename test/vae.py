@@ -19,8 +19,10 @@ vae = AutoencoderKL.from_pretrained(
 # encoder output: latent_dist
 
 # load image
-img_path = "./assets/test/naruto.jpeg"
-result_img_path = "./assets/test/vae_naruto.png"
+# img_path = "./assets/test/naruto.jpeg"
+# result_img_path = "./assets/test/vae_naruto.png"
+img_path = "./assets/test/744_1624.jpg"
+result_img_path = "./assets/test/vae_744_1624.png"
 raw_image = Image.open(img_path).convert("RGB")
 logger.debug(f"raw_image: {raw_image.size}")
 # 创建转换器对象
