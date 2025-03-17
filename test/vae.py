@@ -8,7 +8,7 @@ vae = AutoencoderKL.from_pretrained(
     torch_dtype=torch.bfloat16,
     local_files_only=True,
     subfolder="vae",
-)
+).to("cuda:0")
 
 # encoder input: batch_size, num_channels, height, width
 # encoder output: latent_dist
