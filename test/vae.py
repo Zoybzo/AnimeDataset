@@ -1,4 +1,5 @@
 from diffusers import CogView4Pipeline, AutoencoderKL
+from torchvision import transforms
 import torch
 from PIL import Image
 
