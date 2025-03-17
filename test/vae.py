@@ -18,7 +18,7 @@ vae = AutoencoderKL.from_pretrained(
 # load image
 img_path = "./assets/test/naruto.jpeg"
 raw_image = Image.open(img_path).convert("RGB")
-logger.debug(f"raw_image: {raw_image.shape}")
+logger.debug(f"raw_image: {raw_image.size}")
 # 创建转换器对象
 transform = transforms.ToTensor()
 to_pil_image = transforms.ToPILImage()
