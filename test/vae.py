@@ -13,7 +13,7 @@ vae = AutoencoderKL.from_pretrained(
     torch_dtype=torch.bfloat16,
     local_files_only=True,
     subfolder="vae",
-).to("cuda:0")
+).to("cpu")
 vae.enable_slicing()
 vae.enable_tiling()
 
@@ -31,9 +31,7 @@ logger.debug(f"raw_image: {raw_image.size}")
 transform = transforms.ToTensor()
 to_pil_image = transforms.ToPILImage()
 # 转换图片为 tensor
-image_tensor = (
-    transform(raw_image).unsqueeze(0).to(device="cuda:0", dtype=torch.bfloat16)
-)
+image_tensor = transform(raw_image).unsqueeze(0).to(device="cpu", dtype=torch.bfloat16)
 logger.debug(f"image_tensor.shape: {image_tensor.shape}")
 sample = vae.forward(image_tensor)
 logger.debug(f"sample: {sample}")
