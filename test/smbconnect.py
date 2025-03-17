@@ -22,7 +22,9 @@ password = config["password"]
 # conn.connect('172.16.17.42', 445)
 
 # 创建 SMB 连接
-conn = SMBConnection(username, password, "client_machine_name", server_name, use_ntlm_v2=True)
+conn = SMBConnection(
+    username, password, "client_machine_name", server_name, use_ntlm_v2=True
+)
 
 try:
     # 连接到服务器

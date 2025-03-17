@@ -98,8 +98,12 @@ def retrieve_timesteps(
         `Tuple[torch.Tensor, int]`: A tuple where the first element is the timestep schedule from the scheduler and the
         second element is the number of inference steps.
     """
-    accepts_timesteps = "timesteps" in set(inspect.signature(scheduler.set_timesteps).parameters.keys())
-    accepts_sigmas = "sigmas" in set(inspect.signature(scheduler.set_timesteps).parameters.keys())
+    accepts_timesteps = "timesteps" in set(
+        inspect.signature(scheduler.set_timesteps).parameters.keys()
+    )
+    accepts_sigmas = "sigmas" in set(
+        inspect.signature(scheduler.set_timesteps).parameters.keys()
+    )
 
     if timesteps is not None and sigmas is not None:
         if not accepts_timesteps and not accepts_sigmas:
@@ -107,7 +111,9 @@ def retrieve_timesteps(
                 f"The current scheduler class {scheduler.__class__}'s `set_timesteps` does not support custom"
                 f" timestep or sigma schedules. Please check whether you are using the correct scheduler."
             )
-        scheduler.set_timesteps(timesteps=timesteps, sigmas=sigmas, device=device, **kwargs)
+        scheduler.set_timesteps(
+            timesteps=timesteps, sigmas=sigmas, device=device, **kwargs
+        )
         timesteps = scheduler.timesteps
         num_inference_steps = len(timesteps)
     elif timesteps is not None and sigmas is None:
@@ -170,9 +176,17 @@ class CogView4Pipeline(DiffusionPipeline, CogView4LoraLoaderMixin):
         super().__init__()
 
         self.register_modules(
-            tokenizer=tokenizer, text_encoder=text_encoder, vae=vae, transformer=transformer, scheduler=scheduler
+            tokenizer=tokenizer,
+            text_encoder=text_encoder,
+            vae=vae,
+            transformer=transformer,
+            scheduler=scheduler,
         )
-        self.vae_scale_factor = 2 ** (len(self.vae.config.block_out_channels) - 1) if getattr(self, "vae", None) else 8
+        self.vae_scale_factor = (
+            2 ** (len(self.vae.config.block_out_channels) - 1)
+            if getattr(self, "vae", None)
+            else 8
+        )
         self.image_processor = VaeImageProcessor(vae_scale_factor=self.vae_scale_factor)
 
     def _get_glm_embeds(
@@ -196,9 +210,15 @@ class CogView4Pipeline(DiffusionPipeline, CogView4LoraLoaderMixin):
             return_tensors="pt",
         )
         text_input_ids = text_inputs.input_ids
-        untruncated_ids = self.tokenizer(prompt, padding="longest", return_tensors="pt").input_ids
-        if untruncated_ids.shape[-1] >= text_input_ids.shape[-1] and not torch.equal(text_input_ids, untruncated_ids):
-            removed_text = self.tokenizer.batch_decode(untruncated_ids[:, max_sequence_length - 1 : -1])
+        untruncated_ids = self.tokenizer(
+            prompt, padding="longest", return_tensors="pt"
+        ).input_ids
+        if untruncated_ids.shape[-1] >= text_input_ids.shape[-1] and not torch.equal(
+            text_input_ids, untruncated_ids
+        ):
+            removed_text = self.tokenizer.batch_decode(
+                untruncated_ids[:, max_sequence_length - 1 : -1]
+            )
             logger.warning(
                 "The following part of your input was truncated because `max_sequence_length` is set to "
                 f" {max_sequence_length} tokens: {removed_text}"
@@ -269,15 +289,23 @@ class CogView4Pipeline(DiffusionPipeline, CogView4LoraLoaderMixin):
             batch_size = prompt_embeds.shape[0]
 
         if prompt_embeds is None:
-            prompt_embeds = self._get_glm_embeds(prompt, max_sequence_length, device, dtype)
+            prompt_embeds = self._get_glm_embeds(
+                prompt, max_sequence_length, device, dtype
+            )
 
         seq_len = prompt_embeds.size(1)
         prompt_embeds = prompt_embeds.repeat(1, num_images_per_prompt, 1)
-        prompt_embeds = prompt_embeds.view(batch_size * num_images_per_prompt, seq_len, -1)
+        prompt_embeds = prompt_embeds.view(
+            batch_size * num_images_per_prompt, seq_len, -1
+        )
 
         if do_classifier_free_guidance and negative_prompt_embeds is None:
             negative_prompt = negative_prompt or ""
-            negative_prompt = batch_size * [negative_prompt] if isinstance(negative_prompt, str) else negative_prompt
+            negative_prompt = (
+                batch_size * [negative_prompt]
+                if isinstance(negative_prompt, str)
+                else negative_prompt
+            )
 
             if prompt is not None and type(prompt) is not type(negative_prompt):
                 raise TypeError(
@@ -291,15 +319,31 @@ class CogView4Pipeline(DiffusionPipeline, CogView4LoraLoaderMixin):
                     " the batch size of `prompt`."
                 )
 
-            negative_prompt_embeds = self._get_glm_embeds(negative_prompt, max_sequence_length, device, dtype)
+            negative_prompt_embeds = self._get_glm_embeds(
+                negative_prompt, max_sequence_length, device, dtype
+            )
 
             seq_len = negative_prompt_embeds.size(1)
-            negative_prompt_embeds = negative_prompt_embeds.repeat(1, num_images_per_prompt, 1)
-            negative_prompt_embeds = negative_prompt_embeds.view(batch_size * num_images_per_prompt, seq_len, -1)
+            negative_prompt_embeds = negative_prompt_embeds.repeat(
+                1, num_images_per_prompt, 1
+            )
+            negative_prompt_embeds = negative_prompt_embeds.view(
+                batch_size * num_images_per_prompt, seq_len, -1
+            )
 
         return prompt_embeds, negative_prompt_embeds
 
-    def prepare_latents(self, batch_size, num_channels_latents, height, width, dtype, device, generator, latents=None):
+    def prepare_latents(
+        self,
+        batch_size,
+        num_channels_latents,
+        height,
+        width,
+        dtype,
+        device,
+        generator,
+        latents=None,
+    ):
         if latents is not None:
             return latents.to(device)
 
@@ -328,10 +372,13 @@ class CogView4Pipeline(DiffusionPipeline, CogView4LoraLoaderMixin):
         negative_prompt_embeds=None,
     ):
         if height % 16 != 0 or width % 16 != 0:
-            raise ValueError(f"`height` and `width` have to be divisible by 16 but are {height} and {width}.")
+            raise ValueError(
+                f"`height` and `width` have to be divisible by 16 but are {height} and {width}."
+            )
 
         if callback_on_step_end_tensor_inputs is not None and not all(
-            k in self._callback_tensor_inputs for k in callback_on_step_end_tensor_inputs
+            k in self._callback_tensor_inputs
+            for k in callback_on_step_end_tensor_inputs
         ):
             raise ValueError(
                 f"`callback_on_step_end_tensor_inputs` has to be in {self._callback_tensor_inputs}, but found {[k for k in callback_on_step_end_tensor_inputs if k not in self._callback_tensor_inputs]}"
@@ -345,8 +392,12 @@ class CogView4Pipeline(DiffusionPipeline, CogView4LoraLoaderMixin):
             raise ValueError(
                 "Provide either `prompt` or `prompt_embeds`. Cannot leave both `prompt` and `prompt_embeds` undefined."
             )
-        elif prompt is not None and (not isinstance(prompt, str) and not isinstance(prompt, list)):
-            raise ValueError(f"`prompt` has to be of type `str` or `list` but is {type(prompt)}")
+        elif prompt is not None and (
+            not isinstance(prompt, str) and not isinstance(prompt, list)
+        ):
+            raise ValueError(
+                f"`prompt` has to be of type `str` or `list` but is {type(prompt)}"
+            )
 
         if prompt is not None and negative_prompt_embeds is not None:
             raise ValueError(
@@ -420,7 +471,11 @@ class CogView4Pipeline(DiffusionPipeline, CogView4LoraLoaderMixin):
         return_dict: bool = True,
         attention_kwargs: Optional[Dict[str, Any]] = None,
         callback_on_step_end: Optional[
-            Union[Callable[[int, int, Dict], None], PipelineCallback, MultiPipelineCallbacks]
+            Union[
+                Callable[[int, int, Dict], None],
+                PipelineCallback,
+                MultiPipelineCallbacks,
+            ]
         ] = None,
         callback_on_step_end_tensor_inputs: List[str] = ["latents"],
         max_sequence_length: int = 1024,
@@ -571,25 +626,39 @@ class CogView4Pipeline(DiffusionPipeline, CogView4LoraLoaderMixin):
         )
 
         # Prepare additional timestep conditions
-        original_size = torch.tensor([original_size], dtype=prompt_embeds.dtype, device=device)
-        target_size = torch.tensor([target_size], dtype=prompt_embeds.dtype, device=device)
-        crops_coords_top_left = torch.tensor([crops_coords_top_left], dtype=prompt_embeds.dtype, device=device)
+        original_size = torch.tensor(
+            [original_size], dtype=prompt_embeds.dtype, device=device
+        )
+        target_size = torch.tensor(
+            [target_size], dtype=prompt_embeds.dtype, device=device
+        )
+        crops_coords_top_left = torch.tensor(
+            [crops_coords_top_left], dtype=prompt_embeds.dtype, device=device
+        )
 
         original_size = original_size.repeat(batch_size * num_images_per_prompt, 1)
         target_size = target_size.repeat(batch_size * num_images_per_prompt, 1)
-        crops_coords_top_left = crops_coords_top_left.repeat(batch_size * num_images_per_prompt, 1)
+        crops_coords_top_left = crops_coords_top_left.repeat(
+            batch_size * num_images_per_prompt, 1
+        )
 
         # Prepare timesteps
-        image_seq_len = ((height // self.vae_scale_factor) * (width // self.vae_scale_factor)) // (
-            self.transformer.config.patch_size**2
-        )
+        image_seq_len = (
+            (height // self.vae_scale_factor) * (width // self.vae_scale_factor)
+        ) // (self.transformer.config.patch_size**2)
         timesteps = (
-            np.linspace(self.scheduler.config.num_train_timesteps, 1.0, num_inference_steps)
+            np.linspace(
+                self.scheduler.config.num_train_timesteps, 1.0, num_inference_steps
+            )
             if timesteps is None
             else np.array(timesteps)
         )
         timesteps = timesteps.astype(np.int64).astype(np.float32)
-        sigmas = timesteps / self.scheduler.config.num_train_timesteps if sigmas is None else sigmas
+        sigmas = (
+            timesteps / self.scheduler.config.num_train_timesteps
+            if sigmas is None
+            else sigmas
+        )
         mu = calculate_shift(
             image_seq_len,
             self.scheduler.config.get("base_image_seq_len", 256),
@@ -603,7 +672,9 @@ class CogView4Pipeline(DiffusionPipeline, CogView4LoraLoaderMixin):
 
         # Denoising loop
         transformer_dtype = self.transformer.dtype
-        num_warmup_steps = max(len(timesteps) - num_inference_steps * self.scheduler.order, 0)
+        num_warmup_steps = max(
+            len(timesteps) - num_inference_steps * self.scheduler.order, 0
+        )
 
         with self.progress_bar(total=num_inference_steps) as progress_bar:
             for i, t in enumerate(timesteps):
@@ -639,23 +710,33 @@ class CogView4Pipeline(DiffusionPipeline, CogView4LoraLoaderMixin):
                         return_dict=False,
                     )[0]
 
-                    noise_pred = noise_pred_uncond + self.guidance_scale * (noise_pred_cond - noise_pred_uncond)
+                    noise_pred = noise_pred_uncond + self.guidance_scale * (
+                        noise_pred_cond - noise_pred_uncond
+                    )
                 else:
                     noise_pred = noise_pred_cond
 
-                latents = self.scheduler.step(noise_pred, t, latents, return_dict=False)[0]
+                latents = self.scheduler.step(
+                    noise_pred, t, latents, return_dict=False
+                )[0]
 
                 # call the callback, if provided
                 if callback_on_step_end is not None:
                     callback_kwargs = {}
                     for k in callback_on_step_end_tensor_inputs:
                         callback_kwargs[k] = locals()[k]
-                    callback_outputs = callback_on_step_end(self, i, self.scheduler.sigmas[i], callback_kwargs)
+                    callback_outputs = callback_on_step_end(
+                        self, i, self.scheduler.sigmas[i], callback_kwargs
+                    )
                     latents = callback_outputs.pop("latents", latents)
                     prompt_embeds = callback_outputs.pop("prompt_embeds", prompt_embeds)
-                    negative_prompt_embeds = callback_outputs.pop("negative_prompt_embeds", negative_prompt_embeds)
+                    negative_prompt_embeds = callback_outputs.pop(
+                        "negative_prompt_embeds", negative_prompt_embeds
+                    )
 
-                if i == len(timesteps) - 1 or ((i + 1) > num_warmup_steps and (i + 1) % self.scheduler.order == 0):
+                if i == len(timesteps) - 1 or (
+                    (i + 1) > num_warmup_steps and (i + 1) % self.scheduler.order == 0
+                ):
                     progress_bar.update()
 
                 if XLA_AVAILABLE:
