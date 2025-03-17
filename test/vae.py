@@ -1,5 +1,6 @@
 from diffusers import CogView4Pipeline, AutoencoderKL
 import torch
+from PIL import Image
 
 vae = AutoencoderKL.from_pretrained(
     "THUDM/CogView4-6B",
