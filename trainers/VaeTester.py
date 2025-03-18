@@ -29,6 +29,7 @@ class VaeTester(Trainer):
         tot_psnr = 0.0
         data_lens = len(dataloader)
         for idx, features in enumerate(dataloader):
+            features = features.to(device=self.device, dtype=torch.bfloat16)
             sample = self.vae.forward(features)
             psnr = metrics.calculate_psnr(features, sample).item()
             logger.info(f"{idx} psnr: {psnr}")
