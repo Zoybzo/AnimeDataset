@@ -28,5 +28,8 @@ class VaeTester(Trainer):
         data_lens = len(dataloader)
         for idx, features in enumerate(dataloader):
             sample = self.vae.forward(features)
-            psnr = metrics.calculate_psnr(features, sample)
+            psnr = metrics.calculate_psnr(features, sample).item()
             logger.info(f"{idx} psnr: {psnr}")
+            tot_psnr += psnr
+        avg_psnr = tot_psnr / data_lens
+        return avg_psnr
