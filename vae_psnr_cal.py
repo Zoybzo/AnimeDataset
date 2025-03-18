@@ -6,7 +6,7 @@ from loguru import logger
 
 from dataset.MiraiDataset import MiraiDataset
 from utils.get_path import DATASET_HOME
-from trainers import VaeTester
+from trainers.VaeTester import VaeTester
 
 if __name__ == "__main__":
     # dataset
