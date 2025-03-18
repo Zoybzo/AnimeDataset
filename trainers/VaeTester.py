@@ -7,6 +7,7 @@ from utils import metrics
 
 class VaeTester(Trainer):
     def __init__(self, model_path, subfolder="vae", device="cpu"):
+        super().__init__()
         self.model_path = model_path
         self.subfolder = subfolder
         self.device = device
