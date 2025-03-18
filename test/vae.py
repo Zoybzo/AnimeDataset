@@ -25,7 +25,7 @@ vae.enable_tiling()
 # result_img_path = "./assets/test/vae_naruto.png"
 img_path = "./assets/test/744_1624.jpg"
 result_img_path = "./assets/test/vae_744_1624.png"
-raw_image = Image.open(img_path).convert("RGB")
+raw_image = Image.open(img_path).convert("RGB")  # [0, 1]
 logger.debug(f"raw_image: {raw_image.size}")
 # 创建转换器对象
 transform = transforms.ToTensor()

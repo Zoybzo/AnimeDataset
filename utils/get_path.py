@@ -1,3 +1,4 @@
 import os
 
-MHOME = os.environ.get("MODEL_HOME")
+MODEL_HOME = os.environ.get("MODEL_HOME")
+DATASET_HOME = os.environ.get("DATASET_HOME")
