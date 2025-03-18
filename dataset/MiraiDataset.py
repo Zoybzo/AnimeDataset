@@ -23,7 +23,7 @@ class MiraiDataset(Dataset):
         ]
 
     def __len__(self):
-        return len(self.image_list)
+        return len(self.image_path_list)
 
     def __getitem__(self, idx):
         if torch.is_tensor(idx):
