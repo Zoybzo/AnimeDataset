@@ -2,6 +2,8 @@ from diffusers import AutoencoderKL
 import torch
 import numpy as np
 
+from loguru import logger
+
 from trainers.Trainer import Trainer
 from utils import metrics
 
