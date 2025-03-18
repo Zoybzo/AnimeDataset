@@ -23,7 +23,6 @@ dataset = MiraiDataset(
     color=color,
 )
 dataloader = DataLoader(dataset, batch_size=64, shuffle=True)
-for features in next(iter(dataloader)):
-    print(type(features))
+for idx, features in enumerate(dataloader):
+    print(features)
     print(features.size())
-    print(features.shape())
