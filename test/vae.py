@@ -40,8 +40,5 @@ logger.debug(f"sample.shape: {sample.shape}")
 rec_image = to_pil_image(sample)
 rec_image.save(result_img_path)
 
-
-img1 = np.array(Image.open(img_path).convert("L"), dtype=np.float32)
-img2 = np.array(Image.open(result_img_path).convert("L"), dtype=np.float32)
-psnr_value = peak_signal_noise_ratio(img1, img2, data_range=255)
-logger.info(f"PSNR: {psnr_value:.2f} dB")
+psnr = metrics.calculate_psnr(image_tensor, sample)
+logger.info(f"psnr: {psnr.shape}; {psnr}")

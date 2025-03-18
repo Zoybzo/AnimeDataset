@@ -1,4 +1,8 @@
+from skimage.metrics import peak_signal_noise_ratio
+import numpy as np
+
 from trainers import Trainer
+from utils import metrics
 
 
 class VaeTester(Trainer):
@@ -20,5 +24,9 @@ class VaeTester(Trainer):
         self.vae.enable_tiling()
 
     def validate(self, dataloader):
-        for features in next(iter(dataloader)):
-            print(features.size())
+        tot_psnr = 0.0
+        data_lens = len(dataloader)
+        for idx, features in enumerate(dataloader):
+            sample = self.vae.forward(features)
+            psnr = metrics.calculate_psnr(features, sample)
+            logger.info(f"{idx} psnr: {psnr}")
