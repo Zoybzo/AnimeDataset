@@ -1,7 +1,7 @@
 from skimage.metrics import peak_signal_noise_ratio
 import numpy as np
 
-from trainers import Trainer
+from trainers.Trainer import Trainer
 from utils import metrics
 
 
