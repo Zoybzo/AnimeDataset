@@ -1,7 +1,7 @@
 import torch
 from diffusers import StableDiffusionXLPipeline
 
-from utils.get_path import MHOME
+from utils.get_path import MODEL_HOME
 
 pipe = StableDiffusionXLPipeline.from_pretrained(
     "cagliostrolab/animagine-xl-4.0",

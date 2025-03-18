@@ -1,9 +1,9 @@
 from lmdeploy import pipeline, ChatTemplateConfig
 from lmdeploy.vl import load_image
 
-from utils.get_path import MHOME
+from utils.get_path import MODEL_HOME
 
-model_path = f"{MHOME}/Models/llava-llama-3-8b"
+model_path = f"{MODEL_HOME}/Models/llava-llama-3-8b"
 pipe = pipeline(
     model_path, chat_template_config=ChatTemplateConfig(model_name="llama3")
 )

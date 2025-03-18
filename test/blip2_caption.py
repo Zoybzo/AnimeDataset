@@ -2,7 +2,7 @@ import requests
 from PIL import Image
 from transformers import Blip2Processor, Blip2ForConditionalGeneration
 
-from utils.get_path import MHOME
+from utils.get_path import MODEL_HOME
 
 # model_path = f"{MHOME}/Models/blip2-opt-2.7b"
 model_path = "Salesforce/blip2-opt-2.7b"

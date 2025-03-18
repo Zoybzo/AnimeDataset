@@ -1,5 +1,6 @@
 from torchvision import transforms
 from torch.utils.data import DataLoader
+import torch
 
 from dataset.MiraiDataset import MiraiDataset
 from utils.get_path import DATASET_HOME
