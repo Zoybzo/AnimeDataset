@@ -13,7 +13,7 @@ if __name__ == "__main__":
     root_dir = f"{DATASET_HOME}/miraimind_12702"
     file_name = "title.txt"
     image_folder = "images"
-    color = "L"
+    color = "RGB"
     # model
     model_path = "THUDM/CogView4-6B"
     subfolder = "vae"
