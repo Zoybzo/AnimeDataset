@@ -1,7 +1,7 @@
 from torchvision import transforms
 from torch.utils.data import DataLoader
 import torch
-from torch.datasets import ImageNet
+from torchvision.datasets import ImageNet
 
 from loguru import logger
 
