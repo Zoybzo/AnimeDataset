@@ -1,4 +1,5 @@
 from skimage.metrics import peak_signal_noise_ratio
+from diffusers import AutoencoderKL
 import numpy as np
 
 from trainers.Trainer import Trainer
