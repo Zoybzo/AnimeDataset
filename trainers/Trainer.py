@@ -1,15 +1,15 @@
 class Trainer:
-    def __init__(self, args):
+    def __init__(self, model_path, **kwargs):
         pass
 
-    def prepare_models(self):
+    def prepare_models(self, model_path, **kwargs):
         pass
 
-    def train(self):
+    def train(self, train_dataloader, **kwargs):
         pass
 
-    def validate(self):
+    def validate(self, valid_dataloader, **kwargs):
         pass
 
-    def fit(self):
+    def fit(self, train_dataloader, **kwargs):
         pass
