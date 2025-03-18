@@ -1,7 +1,7 @@
 from torchvision import transforms
 from torch.utils.data import DataLoader
 
-from dataset import MiraiDataset
+from dataset.MiraiDataset import MiraiDataset
 from utils.get_path import DATASET_HOME
 
 root_dir = f"{DATASET_HOME}/miraimind_12702"
