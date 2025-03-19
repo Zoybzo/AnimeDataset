@@ -15,7 +15,8 @@ if __name__ == "__main__":
     image_folder = "images"
     color = "RGB"
     # model
-    model_path = "THUDM/CogView4-6B"
+    # model_path = "THUDM/CogView4-6B"
+    model_path = "stabilityai/sdxl-turbo"
     subfolder = "vae"
     device = "cuda:0"
 
