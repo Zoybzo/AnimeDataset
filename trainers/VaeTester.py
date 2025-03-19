@@ -27,7 +27,9 @@ class VaeTester(Trainer):
         self.vae.enable_slicing()
         self.vae.enable_tiling()
 
+    @torch.no_grad()
     def validate(self, dataloader):
+        self.vae.eval()
         tot_psnr = 0.0
         data_lens = len(dataloader)
         for idx, features in enumerate(dataloader):
