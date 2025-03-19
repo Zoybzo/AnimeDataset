@@ -16,7 +16,8 @@ if __name__ == "__main__":
     color = "RGB"
     # model
     # model_path = "THUDM/CogView4-6B"
-    model_path = "stabilityai/sdxl-turbo"
+    # model_path = "stabilityai/sdxl-turbo"
+    model_path = "stabilityai/stable-diffusion-3.5-large"
     subfolder = "vae"
     device = "cuda:0"
 
