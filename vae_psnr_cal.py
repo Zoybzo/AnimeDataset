@@ -17,7 +17,7 @@ if __name__ == "__main__":
     # model
     model_path = "THUDM/CogView4-6B"
     subfolder = "vae"
-    device = "cpu"
+    device = "cuda:0"
 
     custom_transform = transforms.Compose(
         [
@@ -33,7 +33,7 @@ if __name__ == "__main__":
         transform=custom_transform,
         color=color,
     )
-    dataloader = DataLoader(dataset, batch_size=128, shuffle=True)
+    dataloader = DataLoader(dataset, batch_size=16, shuffle=True)
     vae_tester = VaeTester(model_path=model_path, subfolder=subfolder, device=device)
     avg_psnr = vae_tester.validate(dataloader)
     logger.info(f"Avg psnr: {avg_psnr}")
