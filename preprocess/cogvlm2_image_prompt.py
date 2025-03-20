@@ -142,6 +142,7 @@ if __name__ == "__main__":
         file_name=file_name,
         image_folder=image_folder,
         color=color,
+        transform=custom_transform,
     )
     dataloader = DataLoader(image_dataset, batch_size=1, shuffle=False)
     for idx, sample in enumerate(dataloader):
