@@ -3,6 +3,7 @@ import os
 from re import L
 
 import torch
+from torchvision import transforms
 from PIL import Image
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from accelerate import (
@@ -15,6 +16,7 @@ from loguru import logger as loguru_logger
 
 from utils.get_path import DATASET_HOME, MODEL_HOME
 from dataset.ImageDataset import ImageDataset
+from utils.resize_pad import ResizeAndPad
 
 
 class Cogvlm2ImagePrompt:
@@ -32,6 +34,7 @@ class Cogvlm2ImagePrompt:
                 trust_remote_code=True,
             )
         num_gpus = torch.cuda.device_count()
+        loguru_logger.info(f"Num gpus: {num_gpus}")
         max_memory_per_gpu = "32GiB"
         if num_gpus > 2:
             max_memory_per_gpu = f"{round(42 / num_gpus)}GiB"
@@ -121,6 +124,14 @@ if __name__ == "__main__":
     file_name = "title.txt"
     image_folder = "images"
     color = "RGB"
+    custom_transform = transforms.Compose(
+        [
+            ResizeAndPad((224, 224)),  # 调整大小并填充
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ]
+    )
+    custom_anti_transform = transforms.ToPILImage()
 
     # build
     image_generation = Cogvlm2ImagePrompt(
@@ -135,5 +146,6 @@ if __name__ == "__main__":
     dataloader = DataLoader(image_dataset, batch_size=1, shuffle=False)
     for idx, sample in enumerate(dataloader):
         loguru_logger.debug(sample)
+        loguru_logger.debug(sample.shape())
 
         # data = data.to(device)
