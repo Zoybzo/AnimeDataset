@@ -107,6 +107,7 @@ class Cogvlm2ImagePrompt:
 
 
 if __name__ == "__main__":
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0,2,3,4,5"
     # model
     MODEL_PATH = os.path.join(MODEL_HOME, "cogvlm2-llama3-chat-19B")
     DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
