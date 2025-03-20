@@ -5,10 +5,11 @@ from re import L
 import torch
 from PIL import Image
 from transformers import AutoModelForCausalLM, AutoTokenizer
-
-# from transformers_modules.cogvlm2_llama3_chat_19B.tokenization_cogvlm import (
-# CogVLMTokenizer,
-# )
+from accelerate import (
+    init_empty_weights,
+    load_checkpoint_and_dispatch,
+    infer_auto_device_map,
+)
 from torch.utils.data import DataLoader
 from loguru import logger as loguru_logger
 
@@ -24,15 +25,20 @@ class Cogvlm2ImagePrompt:
         self.tokenizer = AutoTokenizer.from_pretrained(
             self.model_path, trust_remote_code=True
         )
-        self.model = (
-            AutoModelForCausalLM.from_pretrained(
-                self.model_path,
-                torch_dtype=self.torch_type,
-                trust_remote_code=True,
-            )
-            .to(self.device)
-            .eval()
+        num_gpus = torch.cuda.device_count()
+        max_memory_per_gpu = "32GiB"
+        if num_gpus > 2:
+            max_memory_per_gpu = f"{round(42 / num_gpus)}GiB"
+
+        device_map = infer_auto_device_map(
+            model=self.model,
+            max_memory={i: max_memory_per_gpu for i in range(num_gpus)},
+            no_split_module_classes=["CogVLMDecoderLayer"],
         )
+        self.model = load_checkpoint_and_dispatch(
+            self.model, self.model_path, device_map=device_map, dtype=self.torch_type
+        )
+        self.model = self.model.eval()
         self.text_only_template = "A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions. USER: {} ASSISTANT:"
 
     def generate_prompt(self, text, image_path=None, text_only_template=None):
@@ -71,13 +77,9 @@ class Cogvlm2ImagePrompt:
                 template_version="chat",
             )
         inputs = {
-            "input_ids": input_by_model["input_ids"].unsqueeze(0).to(self.device),
-            "token_type_ids": input_by_model["token_type_ids"]
-            .unsqueeze(0)
-            .to(self.device),
-            "attention_mask": input_by_model["attention_mask"]
-            .unsqueeze(0)
-            .to(self.device),
+            "input_ids": input_by_model["input_ids"].unsqueeze(0).to(DEVICE),
+            "token_type_ids": input_by_model["token_type_ids"].unsqueeze(0).to(DEVICE),
+            "attention_mask": input_by_model["attention_mask"].unsqueeze(0).to(DEVICE),
             "images": (
                 [[input_by_model["images"][0].to(DEVICE).to(TORCH_TYPE)]]
                 if image is not None
@@ -87,12 +89,13 @@ class Cogvlm2ImagePrompt:
         gen_kwargs = {
             "max_new_tokens": 2048,
             "pad_token_id": 128002,
+            "top_k": 1,
         }
         with torch.no_grad():
             outputs = self.model.generate(**inputs, **gen_kwargs)
             outputs = outputs[:, inputs["input_ids"].shape[1] :]
             response = self.tokenizer.decode(outputs[0])
-            response = response.split("<|end_of_text|>")[0]
+            response = response.split("")[0]
             print("\nCogVLM2:", response)
         history.append((query, response))
 
