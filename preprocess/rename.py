@@ -1,12 +1,13 @@
 import os
 import re
 
+
 def replace_special_characters(path):
     """
     递归替换文件夹和文件名称中的特殊字符（保留点号 .）
     """
     # 定义需要替换的特殊字符模式（排除点号 .）
-    special_chars_pattern = r"[\"'()\[\]{}<>~`!@#$%^&*+=|\\/:;,\s?\"']"
+    special_chars_pattern = r"[\"'()（）\[\]{}<>~`!@#$%^&*+=|\\/:;,\s?\"']"
 
     # 遍历指定路径下的所有文件和文件夹
     for root, dirs, files in os.walk(path, topdown=False):
@@ -26,12 +27,14 @@ def replace_special_characters(path):
             # 只替换文件名部分的特殊字符
             new_name_part = re.sub(special_chars_pattern, "_", name_part)
             new_file_name = new_name_part + extension_part
+            new_file_name = new_file_name.replace("图片", "img")
 
             if file_name != new_file_name:
                 old_file_path = os.path.join(root, file_name)
                 new_file_path = os.path.join(root, new_file_name)
                 os.rename(old_file_path, new_file_path)
                 print(f"Renamed file: {old_file_path} -> {new_file_path}")
+
 
 if __name__ == "__main__":
     folder_path = input("请输入目标文件夹路径: ")
