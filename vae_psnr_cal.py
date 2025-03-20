@@ -4,7 +4,7 @@ import torch
 
 from loguru import logger
 
-from dataset.MiraiDataset import MiraiDataset
+from dataset.ImageDataset import ImageDataset
 from utils.get_path import DATASET_HOME
 from trainers.VaeTester import VaeTester
 
@@ -28,7 +28,7 @@ if __name__ == "__main__":
         ]
     )
     custom_anti_transform = transforms.ToPILImage()
-    dataset = MiraiDataset(
+    dataset = ImageDataset(
         root_dir=root_dir,
         file_name=file_name,
         image_folder=image_folder,

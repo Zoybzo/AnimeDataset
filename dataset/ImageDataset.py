@@ -6,7 +6,7 @@ from torchvision import transforms, utils
 from PIL import Image
 
 
-class MiraiDataset(Dataset):
+class ImageDataset(Dataset):
     def __init__(self, root_dir, file_name, image_folder, transform=None, color="RGB"):
         super().__init__()
         self.root_dir = root_dir
@@ -33,4 +33,4 @@ class MiraiDataset(Dataset):
         sample = Image.open(self.image_path_list[idx]).convert(self.color)
         if self.transform:
             sample = self.transform(sample)
-        return sample
+        return {"sample": sample}

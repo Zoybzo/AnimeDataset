@@ -1,11 +1,15 @@
+from logging import root
 import os
 from re import L
 
 import torch
 from PIL import Image
 from transformers import AutoModelForCausalLM, AutoTokenizer
+from torch.utils.data import DataLoader
+from loguru improt logger as loguru_logger
 
-from utils.get_path import MODEL_HOME
+from utils.get_path import DATASET_HOME, MODEL_HOME
+from dataset.ImageDataset import ImageDataset
 
 
 class ImagePrompt:
@@ -90,6 +94,7 @@ class ImagePrompt:
 
 
 if __name__ == "__main__":
+    # model
     MODEL_PATH = os.path.join(MODEL_HOME, "cogvlm2-llama3-chat-19B")
     DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
     TORCH_TYPE = (
@@ -97,6 +102,24 @@ if __name__ == "__main__":
         if torch.cuda.is_available() and torch.cuda.get_device_capability()[0] >= 8
         else torch.float16
     )
+    # dataset
+    root_dir = os.path.join(DATASET_HOME, "kafka_dataset")
+    file_name = "title.txt"
+    image_folder = "images"
+    color = "RGB"
+
+    # build
     image_generation = ImagePrompt(
         model_path=MODEL_PATH, device=DEVICE, torch_type=TORCH_TYPE
     )
+    image_dataset = ImageDataset(
+        root_dir=root_dir,
+        file_name=file_name,
+        image_folder=image_folder,
+        color=color,
+    )
+    dataloader = DataLoader(image_dataset, batch_size=1, shuffle=False)
+    for idx, sample in enumerate(dataloader):
+        loguru_logger.debug(sample)
+
+        # data = data.to(device)
