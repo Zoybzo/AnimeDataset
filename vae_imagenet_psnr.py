@@ -26,7 +26,7 @@ if __name__ == "__main__":
         ]
     )
     custom_anti_transform = transforms.ToPILImage()
-    dataset = ImageNet(root=root_dir)
+    dataset = ImageNet(root=root_dir, transform=custom_transform)
     dataloader = DataLoader(dataset, batch_size=2048, shuffle=True)
     vae_tester = VaeTester(model_path=model_path, subfolder=subfolder, device=device)
     avg_psnr = vae_tester.validate(dataloader)
