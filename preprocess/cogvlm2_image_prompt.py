@@ -5,6 +5,9 @@ from re import L
 import torch
 from PIL import Image
 from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers_modules.cogvlm2_llama3_chat_19B.tokenization_cogvlm import (
+    CogVLMTokenizer,
+)
 from torch.utils.data import DataLoader
 from loguru import logger as loguru_logger
 
@@ -12,12 +15,12 @@ from utils.get_path import DATASET_HOME, MODEL_HOME
 from dataset.ImageDataset import ImageDataset
 
 
-class ImagePrompt:
+class Cogvlm2ImagePrompt:
     def __init__(self, model_path, device="cpu", torch_type=torch.float16):
         self.model_path = model_path
         self.device = device
         self.torch_type = torch_type
-        self.tokenizer = AutoTokenizer.from_pretrained(
+        self.tokenizer = CogVLMTokenizer.from_pretrained(
             self.model_path, trust_remote_code=True
         )
         self.model = (
@@ -109,7 +112,7 @@ if __name__ == "__main__":
     color = "RGB"
 
     # build
-    image_generation = ImagePrompt(
+    image_generation = Cogvlm2ImagePrompt(
         model_path=MODEL_PATH, device=DEVICE, torch_type=TORCH_TYPE
     )
     image_dataset = ImageDataset(
