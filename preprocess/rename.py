@@ -27,7 +27,7 @@ def replace_special_characters(path):
             # 只替换文件名部分的特殊字符
             new_name_part = re.sub(special_chars_pattern, "_", name_part)
             new_file_name = new_name_part + extension_part
-            new_file_name = new_file_name.replace("图片", "img")
+            new_file_name = new_file_name.replace("图像", "img")
 
             if file_name != new_file_name:
                 old_file_path = os.path.join(root, file_name)
