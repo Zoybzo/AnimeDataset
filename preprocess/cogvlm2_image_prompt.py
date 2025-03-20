@@ -6,7 +6,7 @@ import torch
 from PIL import Image
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from torch.utils.data import DataLoader
-from loguru improt logger as loguru_logger
+from loguru import logger as loguru_logger
 
 from utils.get_path import DATASET_HOME, MODEL_HOME
 from dataset.ImageDataset import ImageDataset
