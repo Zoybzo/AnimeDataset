@@ -6,6 +6,7 @@ from torchvision.datasets import ImageNet
 from loguru import logger
 
 from utils.get_path import DATASET_HOME
+from utils.resize_pad import ResizeAndPad
 from trainers.VaeTester import VaeTester
 
 if __name__ == "__main__":
@@ -17,12 +18,13 @@ if __name__ == "__main__":
     # model
     model_path = "THUDM/CogView4-6B"
     subfolder = "vae"
-    device = "cuda:0"
+    device = "cuda:1"
 
     custom_transform = transforms.Compose(
         [
-            transforms.RandomCrop(size=(224, 224)),
+            ResizeAndPad((224, 224)),  # 调整大小并填充
             transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ]
     )
     custom_anti_transform = transforms.ToPILImage()
