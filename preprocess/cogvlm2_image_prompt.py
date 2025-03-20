@@ -5,9 +5,10 @@ from re import L
 import torch
 from PIL import Image
 from transformers import AutoModelForCausalLM, AutoTokenizer
-from transformers_modules.cogvlm2_llama3_chat_19B.tokenization_cogvlm import (
-    CogVLMTokenizer,
-)
+
+# from transformers_modules.cogvlm2_llama3_chat_19B.tokenization_cogvlm import (
+# CogVLMTokenizer,
+# )
 from torch.utils.data import DataLoader
 from loguru import logger as loguru_logger
 
@@ -20,7 +21,7 @@ class Cogvlm2ImagePrompt:
         self.model_path = model_path
         self.device = device
         self.torch_type = torch_type
-        self.tokenizer = CogVLMTokenizer.from_pretrained(
+        self.tokenizer = AutoTokenizer.from_pretrained(
             self.model_path, trust_remote_code=True
         )
         self.model = (
