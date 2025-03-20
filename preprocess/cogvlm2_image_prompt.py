@@ -50,6 +50,7 @@ class Cogvlm2ImagePrompt:
         self.model = self.model.eval()
         self.text_only_template = "A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions. USER: {} ASSISTANT:"
 
+    @torch.no_grad()
     def generate_prompt(self, text, image_path=None, text_only_template=None):
         if text_only_template is None:
             text_only_template = self.text_only_template
@@ -105,8 +106,9 @@ class Cogvlm2ImagePrompt:
             outputs = outputs[:, inputs["input_ids"].shape[1] :]
             response = self.tokenizer.decode(outputs[0])
             response = response.split("")[0]
-            print("\nCogVLM2:", response)
-        history.append((query, response))
+        return response
+        # print("\nCogVLM2:", response)
+        # history.append((query, response))
 
 
 if __name__ == "__main__":
@@ -145,8 +147,13 @@ if __name__ == "__main__":
         transform=custom_transform,
     )
     dataloader = DataLoader(image_dataset, batch_size=1, shuffle=False)
+    text = "Please describe this image in detail."
     for idx, sample in enumerate(dataloader):
-        loguru_logger.debug(sample)
+        image_path = sample["image_path"]
+        sample = sample["sample"]
         loguru_logger.debug(sample.shape())
-
-        # data = data.to(device)
+        response = image_generation.generate_prompt(
+            text,
+            image_path,
+        )
+        loguru_logger.info(f"Response: {response}")

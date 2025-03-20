@@ -33,4 +33,7 @@ class ImageDataset(Dataset):
         sample = Image.open(self.image_path_list[idx]).convert(self.color)
         if self.transform:
             sample = self.transform(sample)
-        return {"sample": sample}
+        return {
+            "sample": sample,
+            "image_path": self.image_path_list[idx],
+        }
