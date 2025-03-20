@@ -151,7 +151,7 @@ if __name__ == "__main__":
     for idx, sample in enumerate(dataloader):
         image_path = sample["image_path"]
         sample = sample["sample"]
-        loguru_logger.debug(sample.shape())
+        loguru_logger.debug(sample.shape)
         response = image_generation.generate_prompt(
             text,
             image_path,
