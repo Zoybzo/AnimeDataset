@@ -152,8 +152,9 @@ if __name__ == "__main__":
         image_path = sample["image_path"]
         sample = sample["sample"]
         loguru_logger.debug(sample.shape)
+        loguru_logger.debug(image_path)
         response = image_generation.generate_prompt(
             text,
-            image_path,
+            image_path[0],
         )
         loguru_logger.info(f"Response: {response}")
