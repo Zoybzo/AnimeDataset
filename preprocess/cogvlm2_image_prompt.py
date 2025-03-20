@@ -25,18 +25,24 @@ class Cogvlm2ImagePrompt:
         self.tokenizer = AutoTokenizer.from_pretrained(
             self.model_path, trust_remote_code=True
         )
+        with init_empty_weights():
+            model = AutoModelForCausalLM.from_pretrained(
+                MODEL_PATH,
+                torch_dtype=TORCH_TYPE,
+                trust_remote_code=True,
+            )
         num_gpus = torch.cuda.device_count()
         max_memory_per_gpu = "32GiB"
         if num_gpus > 2:
             max_memory_per_gpu = f"{round(42 / num_gpus)}GiB"
 
         device_map = infer_auto_device_map(
-            model=self.model,
+            model=model,
             max_memory={i: max_memory_per_gpu for i in range(num_gpus)},
             no_split_module_classes=["CogVLMDecoderLayer"],
         )
         self.model = load_checkpoint_and_dispatch(
-            self.model, self.model_path, device_map=device_map, dtype=self.torch_type
+            model, self.model_path, device_map=device_map, dtype=self.torch_type
         )
         self.model = self.model.eval()
         self.text_only_template = "A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions. USER: {} ASSISTANT:"
