@@ -87,15 +87,21 @@ class Cogvlm2ImagePrompt:
                 template_version="chat",
             )
         inputs = {
-            "input_ids": input_by_model["input_ids"].unsqueeze(0).to(self.device),
+            "input_ids": input_by_model["input_ids"].unsqueeze(0).to(self.model.device),
             "token_type_ids": input_by_model["token_type_ids"]
             .unsqueeze(0)
-            .to(self.device),
+            .to(self.model.device),
             "attention_mask": input_by_model["attention_mask"]
             .unsqueeze(0)
-            .to(self.device),
+            .to(self.model.device),
             "images": (
-                [[input_by_model["images"][0].to(self.device).to(self.torch_type)]]
+                [
+                    [
+                        input_by_model["images"][0]
+                        .to(self.model.device)
+                        .to(self.torch_type)
+                    ]
+                ]
                 if image is not None
                 else None
             ),
