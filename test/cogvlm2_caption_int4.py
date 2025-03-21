@@ -1,8 +1,12 @@
+import os
+
 import torch
 from PIL import Image
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-MODEL_PATH = "THUDM/cogvlm2-llama3-chat-19B-int4"
+from utils.get_path import MODEL_HOME
+
+MODEL_PATH = os.path.join(MODEL_HOME, "cogvlm2-llama3-chat-19B-int4")
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 TORCH_TYPE = (
     torch.bfloat16
