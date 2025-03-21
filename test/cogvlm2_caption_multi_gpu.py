@@ -17,6 +17,8 @@ test success in 3 GPUs with 16GB video memory.
 +---------------------------------------------------------------------------------------+
 """
 
+import os
+
 import torch
 from PIL import Image
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -26,7 +28,10 @@ from accelerate import (
     infer_auto_device_map,
 )
 
-MODEL_PATH = "THUDM/cogvlm2-llama3-chat-19B"
+from utils.get_path import DATASET_HOME, MODEL_HOME
+
+MODEL_PATH = os.path.join(MODEL_HOME, "cogvlm2-llama3-chat-19B")
+# MODEL_PATH = "THUDM/cogvlm2-llama3-chat-19B"
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 TORCH_TYPE = (
     torch.bfloat16
