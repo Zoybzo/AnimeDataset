@@ -87,11 +87,15 @@ class Cogvlm2ImagePrompt:
                 template_version="chat",
             )
         inputs = {
-            "input_ids": input_by_model["input_ids"].unsqueeze(0).to(DEVICE),
-            "token_type_ids": input_by_model["token_type_ids"].unsqueeze(0).to(DEVICE),
-            "attention_mask": input_by_model["attention_mask"].unsqueeze(0).to(DEVICE),
+            "input_ids": input_by_model["input_ids"].unsqueeze(0).to(self.device),
+            "token_type_ids": input_by_model["token_type_ids"]
+            .unsqueeze(0)
+            .to(self.device),
+            "attention_mask": input_by_model["attention_mask"]
+            .unsqueeze(0)
+            .to(self.device),
             "images": (
-                [[input_by_model["images"][0].to(DEVICE).to(TORCH_TYPE)]]
+                [[input_by_model["images"][0].to(self.device).to(self.torch_type)]]
                 if image is not None
                 else None
             ),
@@ -124,7 +128,7 @@ if __name__ == "__main__":
     # dataset
     root_dir = os.path.join(DATASET_HOME, "kafka_dataset")
     file_name = "title.txt"
-    image_folder = "images"
+    image_folder = "100_images"
     color = "RGB"
     custom_transform = transforms.Compose(
         [
@@ -150,8 +154,8 @@ if __name__ == "__main__":
     text = "Please describe this image in detail."
     for idx, sample in enumerate(dataloader):
         image_path = sample["image_path"]
-        sample = sample["sample"]
-        loguru_logger.debug(sample.shape)
+        # sample = sample["sample"].to(DEVICE)
+        # loguru_logger.debug(sample.shape)
         loguru_logger.debug(image_path)
         response = image_generation.generate_prompt(
             text,
