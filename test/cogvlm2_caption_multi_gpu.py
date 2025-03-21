@@ -27,6 +27,7 @@ from accelerate import (
     load_checkpoint_and_dispatch,
     infer_auto_device_map,
 )
+from loguru import logger as loguru_logger
 
 from utils.get_path import DATASET_HOME, MODEL_HOME
 
@@ -38,6 +39,7 @@ TORCH_TYPE = (
     if torch.cuda.is_available() and torch.cuda.get_device_capability()[0] >= 8
     else torch.float16
 )
+loguru_logger.debug(f"torch_dtype: {TORCH_TYPE}")
 
 tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, trust_remote_code=True)
 
@@ -49,7 +51,7 @@ with init_empty_weights():
     )
 
 num_gpus = torch.cuda.device_count()
-max_memory_per_gpu = "16GiB"
+max_memory_per_gpu = "20GiB"
 if num_gpus > 2:
     max_memory_per_gpu = f"{round(42 / num_gpus)}GiB"
 
