@@ -52,6 +52,7 @@ class Cogvlm2ImagePrompt:
 
     @torch.no_grad()
     def generate_prompt(self, text, image_path=None, text_only_template=None):
+        loguru_logger.debug(f"model's device: {self.model.device}")
         if text_only_template is None:
             text_only_template = self.text_only_template
         text_only_first_query = False
@@ -122,7 +123,7 @@ class Cogvlm2ImagePrompt:
 
 
 if __name__ == "__main__":
-    os.environ["CUDA_VISIBLE_DEVICES"] = "0,2,3,4,5"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3,4,5"
     # model
     MODEL_PATH = os.path.join(MODEL_HOME, "cogvlm2-llama3-chat-19B")
     DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
