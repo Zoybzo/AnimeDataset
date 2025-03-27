@@ -13,13 +13,15 @@ from utils import metrics
 
 
 model_path = os.path.join(MODEL_HOME, "stable-diffusion-xl-base-1.0")
+dtype = torch.float16
+device = "cuda:0"
 vae = AutoencoderKL.from_pretrained(
     # "THUDM/CogView4-6B",
     model_path,
-    torch_dtype=torch.float16,
+    torch_dtype=dtype,
     local_files_only=True,
     subfolder="vae",
-).to("cuda:0")
+).to(device)
 vae.enable_slicing()
 vae.enable_tiling()
 
@@ -37,7 +39,7 @@ logger.debug(f"raw_image: {raw_image.size}")
 transform = transforms.ToTensor()
 to_pil_image = transforms.ToPILImage()
 # 转换图片为 tensor
-image_tensor = transform(raw_image).unsqueeze(0).to(device="cpu", dtype=torch.bfloat16)
+image_tensor = transform(raw_image).unsqueeze(0).to(device=device, dtype=dtype)
 logger.debug(f"image_tensor.shape: {image_tensor.shape}")
 sample = vae.forward(image_tensor)
 logger.debug(f"sample: {sample}")
