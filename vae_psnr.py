@@ -20,6 +20,7 @@ def parse_args():
     parser.add_argument("--subfolder", default="vae")
     parser.add_argument("--device", default="cuda:1")
     parser.add_argument("--dataset", default="mirai")
+    parser.add_argument("--batch_size", default=1024)
     return parser.parse_args()
 
 
@@ -29,6 +30,7 @@ if __name__ == "__main__":
     subfolder = args.subfolder
     device = args.device
     dataset = args.dataset
+    batch_size = args.batch_size
 
     custom_transform = transforms.Compose(
         [
@@ -54,7 +56,7 @@ if __name__ == "__main__":
             color=color,
         )
     dtype = torch.float16
-    dataloader = DataLoader(dataset, batch_size=2048, shuffle=True)
+    dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
     vae_tester = VaeTester(
         model_path=model_path, subfolder=subfolder, device=device, dtype=dtype
     )

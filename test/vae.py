@@ -1,20 +1,25 @@
+import os
+
 from diffusers import CogView4Pipeline, AutoencoderKL
 from torchvision import transforms
 import torch
 from PIL import Image
 from skimage.metrics import peak_signal_noise_ratio
 import numpy as np
+from loguru import logger
+
+from utils.get_path import MODEL_HOME
 from utils import metrics
 
 
-from loguru import logger
-
+model_path = os.path.join(MODEL_HOME, "stable-diffusion-xl-base-1.0")
 vae = AutoencoderKL.from_pretrained(
-    "THUDM/CogView4-6B",
-    torch_dtype=torch.bfloat16,
+    # "THUDM/CogView4-6B",
+    model_path,
+    torch_dtype=torch.float16,
     local_files_only=True,
     subfolder="vae",
-).to("cpu")
+).to("cuda:0")
 vae.enable_slicing()
 vae.enable_tiling()
 
