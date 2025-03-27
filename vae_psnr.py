@@ -20,7 +20,7 @@ def parse_args():
     parser.add_argument("--subfolder", default="vae")
     parser.add_argument("--device", default="cuda:1")
     parser.add_argument("--dataset", default="mirai")
-    parser.add_argument("--batch_size", default=1024)
+    parser.add_argument("--batch_size", default=1024, type=int)
     return parser.parse_args()
 
 
