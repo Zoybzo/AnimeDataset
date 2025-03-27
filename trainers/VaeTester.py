@@ -9,21 +9,24 @@ from utils import metrics
 
 
 class VaeTester(Trainer):
-    def __init__(self, model_path, subfolder="vae", device="cpu"):
+    def __init__(self, model_path, subfolder="vae", device="cpu", dtype="float32"):
         super().__init__()
         self.model_path = model_path
         self.subfolder = subfolder
         self.device = device
-        self.prepare_models(self.model_path, self.subfolder, self.device)
+        self.dtype = dtype
+        self.prepare_models(self.model_path, self.subfolder, self.device, self.dtype)
         assert self.vae is not None
 
-    def prepare_models(self, model_path=None, subfolder=None, device="cpu"):
+    def prepare_models(
+        self, model_path=None, subfolder=None, device="cpu", dtype="float32"
+    ):
         self.vae = AutoencoderKL.from_pretrained(
             model_path,
-            torch_dtype=torch.bfloat16,
+            torch_dtype=dtype,
             local_files_only=True,
-            subfolder=self.subfolder,
-        ).to(self.device)
+            subfolder=subfolder,
+        ).to(device)
         self.vae.enable_slicing()
         self.vae.enable_tiling()
 
@@ -35,10 +38,10 @@ class VaeTester(Trainer):
         for idx, features in enumerate(dataloader):
             if isinstance(features, list) or isinstance(features, tuple):
                 features, labels = features[0].to(
-                    device=self.device, dtype=torch.bfloat16
-                ), features[1].to(self.device, dtype=torch.bfloat16)
+                    device=self.device, dtype=self.dtype
+                ), features[1].to(self.device, dtype=self.dtype)
             else:
-                features = features.to(device=self.device, dtype=torch.bfloat16)
+                features = features.to(device=self.device, dtype=self.dtype)
             sample = self.vae.forward(features)["sample"]
             psnr = metrics.calculate_psnr(features, sample).item()
             logger.info(f"{idx} psnr: {psnr}")
