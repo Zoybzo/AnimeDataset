@@ -1,6 +1,6 @@
 import os
 
-from diffusers import CogView4Pipeline, AutoencoderKL
+from diffusers import AutoencoderKL
 from torchvision import transforms
 import torch
 from PIL import Image
