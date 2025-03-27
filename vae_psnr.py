@@ -55,7 +55,7 @@ if __name__ == "__main__":
             transform=custom_transform,
             color=color,
         )
-    dtype = torch.float16
+    dtype = torch.float32
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
     vae_tester = VaeTester(
         model_path=model_path, subfolder=subfolder, device=device, dtype=dtype
