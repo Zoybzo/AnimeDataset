@@ -2,7 +2,7 @@ import os
 import re
 
 
-def replace_special_characters(path):
+def replace_special_characters(path, REPLACE=True):
     """
     递归替换文件夹和文件名称中的特殊字符（保留点号 .）
     """
@@ -21,13 +21,17 @@ def replace_special_characters(path):
                 print(f"Renamed folder: {old_dir_path} -> {new_dir_path}")
 
         # 替换文件名称
-        for file_name in files:
+        for idx, file_name in enumerate(files):
             # 分离文件名和扩展名
             name_part, extension_part = os.path.splitext(file_name)
             # 只替换文件名部分的特殊字符
-            new_name_part = re.sub(special_chars_pattern, "_", name_part)
+            if REPLACE:
+                new_name_part = re.sub(special_chars_pattern, "_", name_part)
+                new_name_part = new_name_part.replace("图像", "img")
+            else:
+                cnt = format(idx, "03")
+                new_name_part = f"image_{cnt}"
             new_file_name = new_name_part + extension_part
-            new_file_name = new_file_name.replace("图像", "img")
 
             if file_name != new_file_name:
                 old_file_path = os.path.join(root, file_name)
@@ -38,8 +42,10 @@ def replace_special_characters(path):
 
 if __name__ == "__main__":
     folder_path = input("请输入目标文件夹路径: ")
+    replace = input("是否只进行REAPLCE(T/N): ")
+    replace = True if replace == "T" else False
     if os.path.exists(folder_path):
-        replace_special_characters(folder_path)
+        replace_special_characters(folder_path, replace)
         print("文件夹和文件名称替换完成！")
     else:
         print("输入的路径不存在，请检查！")
