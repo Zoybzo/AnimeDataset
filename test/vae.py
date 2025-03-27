@@ -14,7 +14,7 @@ from utils import metrics
 
 model_path = os.path.join(MODEL_HOME, "stable-diffusion-xl-base-1.0")
 dtype = torch.float32
-device = "cuda:0"
+device = "cpu"
 vae = AutoencoderKL.from_pretrained(
     # "THUDM/CogView4-6B",
     model_path,
