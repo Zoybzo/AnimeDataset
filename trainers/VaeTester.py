@@ -21,23 +21,23 @@ class VaeTester(Trainer):
     def prepare_models(
         self, model_path=None, subfolder=None, device="cpu", dtype=torch.float32
     ):
-        if "stable" in model_path:
-            pipe = DiffusionPipeline.from_pretrained(
-                model_path,
-                torch_dtype=dtype,
-                use_safetensors=True,
-            )
-            pipe.to(self.device)
-            self.vae = pipe.vae
-        else:
-            self.vae = AutoencoderKL.from_pretrained(
-                model_path,
-                torch_dtype=dtype,
-                local_files_only=True,
-                subfolder=subfolder,
-            ).to(device)
-            self.vae.enable_slicing()
-            self.vae.enable_tiling()
+        # if "stable" in model_path:
+        #     pipe = DiffusionPipeline.from_pretrained(
+        #         model_path,
+        #         torch_dtype=dtype,
+        #         use_safetensors=True,
+        #     )
+        #     pipe.to(self.device)
+        #     self.vae = pipe.vae
+        # else:
+        self.vae = AutoencoderKL.from_pretrained(
+            model_path,
+            torch_dtype=dtype,
+            local_files_only=True,
+            subfolder=subfolder,
+        ).to(device)
+        self.vae.enable_slicing()
+        self.vae.enable_tiling()
 
     @torch.no_grad()
     def validate(self, dataloader):
@@ -49,6 +49,8 @@ class VaeTester(Trainer):
                 features, labels = features[0].to(
                     device=self.device, dtype=self.dtype
                 ), features[1].to(self.device, dtype=self.dtype)
+            elif isinstance(features, dict):
+                features = features["sample"].to(device=self.device, dtype=self.dtype)
             else:
                 features = features.to(device=self.device, dtype=self.dtype)
             sample = self.vae.forward(features)["sample"]
