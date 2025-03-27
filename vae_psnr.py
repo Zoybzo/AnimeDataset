@@ -53,7 +53,10 @@ if __name__ == "__main__":
             transform=custom_transform,
             color=color,
         )
+    dtype = torch.float16
     dataloader = DataLoader(dataset, batch_size=2048, shuffle=True)
-    vae_tester = VaeTester(model_path=model_path, subfolder=subfolder, device=device)
+    vae_tester = VaeTester(
+        model_path=model_path, subfolder=subfolder, device=device, dtype=dtype
+    )
     avg_psnr = vae_tester.validate(dataloader)
     logger.info(f"Avg psnr: {avg_psnr}")

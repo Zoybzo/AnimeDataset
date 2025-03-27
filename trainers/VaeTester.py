@@ -9,7 +9,7 @@ from utils import metrics
 
 
 class VaeTester(Trainer):
-    def __init__(self, model_path, subfolder="vae", device="cpu", dtype="float32"):
+    def __init__(self, model_path, subfolder="vae", device="cpu", dtype=torch.float32):
         super().__init__()
         self.model_path = model_path
         self.subfolder = subfolder
@@ -19,25 +19,25 @@ class VaeTester(Trainer):
         assert self.vae is not None
 
     def prepare_models(
-        self, model_path=None, subfolder=None, device="cpu", dtype="float32"
+        self, model_path=None, subfolder=None, device="cpu", dtype=torch.float32
     ):
-        if "stable" in model_path:
-            pipe = DiffusionPipeline.from_pretrained(
-                model_path,
-                torch_dtype=dtype,
-                use_safetensors=True,
-            )
-            pipe.to(self.device)
-            self.vae = pipe.vae
-        else:
-            self.vae = AutoencoderKL.from_pretrained(
-                model_path,
-                torch_dtype=dtype,
-                local_files_only=True,
-                subfolder=subfolder,
-            ).to(device)
-            self.vae.enable_slicing()
-            self.vae.enable_tiling()
+        # if "stable" in model_path:
+        #     pipe = DiffusionPipeline.from_pretrained(
+        #         model_path,
+        #         torch_dtype=dtype,
+        #         use_safetensors=True,
+        #     )
+        #     pipe.to(self.device)
+        #     self.vae = pipe.vae
+        # else:
+        self.vae = AutoencoderKL.from_pretrained(
+            model_path,
+            torch_dtype=dtype,
+            local_files_only=True,
+            subfolder=subfolder,
+        ).to(device)
+        self.vae.enable_slicing()
+        self.vae.enable_tiling()
 
     @torch.no_grad()
     def validate(self, dataloader):
