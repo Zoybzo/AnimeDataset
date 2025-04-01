@@ -113,7 +113,7 @@ def import_custom_nodes() -> None:
     """
     import asyncio
     import execution
-    from nodes import init_extra_nodes
+    from ComfyUI.nodes import init_extra_nodes
     import server
 
     # Creating a new event loop and setting it as the default loop
@@ -128,8 +128,8 @@ def import_custom_nodes() -> None:
     init_extra_nodes()
 
 
-from nodes import NODE_CLASS_MAPPINGS
-from folder_paths import set_output_directory
+from ComfyUI.nodes import NODE_CLASS_MAPPINGS
+from ComfyUI.folder_paths import set_output_directory
 
 
 def main(lora_name_list, text_list, save_path):
