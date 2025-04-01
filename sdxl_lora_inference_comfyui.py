@@ -6,6 +6,8 @@ import re
 import random
 import sys
 import torch
+import numpy as np
+from PIL import Image
 from typing import Sequence, Mapping, Any, Union
 from loguru import logger as loguru_logger
 
@@ -17,10 +19,15 @@ DATASET_HOME = os.environ.get("DATASET_HOME")
 HOME = os.environ.get("HOME")
 
 
-def save_images(output_dir, image, filename):
+def save_images(output_dir, images, filename):
     loguru_logger.info("Saving images...")
-    image_path = os.path.join(output_dir, filename)
-    image.save(image_path)
+    for batch_number, image in enumerate(images):
+        i = 255.0 * image.cpu().numpy()
+        img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
+        file = f"{filename}_{batch_number}.png"
+        img.save(
+            os.path.join(output_dir, file),
+        )
 
 
 def get_value_at_index(obj: Union[Sequence, Mapping], index: int) -> Any:
@@ -204,7 +211,7 @@ def main(lora_name_list, text_list, save_path):
                     save_images(
                         save_path,
                         images,
-                        f"{lora_name.split('.')[-2].split('-')[-1]}_P{text_idx}_{q}.png",
+                        f"{lora_name.split('.')[-2].split('-')[-1]}_P{text_idx}",
                     )
 
 
