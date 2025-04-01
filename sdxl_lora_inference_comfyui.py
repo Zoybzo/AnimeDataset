@@ -136,6 +136,10 @@ from folder_paths import set_output_directory
 def main(lora_name_list, text_list, save_path, batch_size, st, ed, step):
     import_custom_nodes()
     loguru_logger.info("Inference...")
+    lora_mp = {
+        lora_name: lora_name.split("-")[-1].split(".")[0]
+        for lora_name in lora_name_list
+    }
     keys1 = [lora_name.split("-")[-1].split(".")[0] for lora_name in lora_name_list]
     keys2 = [idx for idx in range(0, len(text_list))]
     image_dict = {key1: {key2: None for key2 in keys2} for key1 in keys1}
@@ -208,7 +212,7 @@ def main(lora_name_list, text_list, save_path, batch_size, st, ed, step):
                         images,
                         f"{''.join(prefix)}_P{text_idx}",
                     )
-                    image_dict[lora_name][text_idx] = batch_images[0][0]
+                    image_dict[lora_mp[lora_name]][text_idx] = batch_images[0][0]
     prefix = "".join(lora_name_list[0].split("-")[:2])
     figure_name = os.path.join(
         save_path,
