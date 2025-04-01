@@ -81,12 +81,12 @@ def add_extra_model_paths() -> None:
     Parse the optional extra_model_paths.yaml file and add the parsed paths to the sys.path.
     """
     try:
-        from main import load_extra_path_config
+        from ComfyUI.main import load_extra_path_config
     except ImportError:
         print(
             "Could not import load_extra_path_config from main.py. Looking in utils.extra_config instead."
         )
-        from utils.extra_config import load_extra_path_config
+        from ComfyUI.utils.extra_config import load_extra_path_config
 
     extra_model_paths = find_path("extra_model_paths.yaml")
 
