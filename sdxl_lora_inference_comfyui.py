@@ -410,7 +410,17 @@ if __name__ == "__main__":
     dataset = args.dataset
     epoch = args.epoch
 
-    lora_prefix = f"{args.lora_prefix}"
+    # lora_prefix = f"{args.lora_prefix}"
+    lora_prefix = ""
+    if date is not None:
+        lora_prefix += "-" + str(date)
+    if id is not None:
+        lora_prefix += "-" + str(id)
+    if dataset is not None:
+        lora_prefix += "-" + str(dataset)
+    if epoch is not None:
+        lora_prefix += "-" + str(epoch)
+    lora_prefix += "-"
     step_range = range(st, ed, step)
 
     lora_name_list = get_lora_list(
