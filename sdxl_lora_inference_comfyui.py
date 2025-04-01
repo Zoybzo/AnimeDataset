@@ -214,7 +214,7 @@ def main(lora_name_list, text_list, save_path):
                     save_images(
                         save_path,
                         images,
-                        f"{"".join(prefix)}_P{text_idx}",
+                        f"{''.join(prefix)}_P{text_idx}",
                     )
 
 
