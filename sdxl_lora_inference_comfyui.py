@@ -133,7 +133,7 @@ from nodes import NODE_CLASS_MAPPINGS
 from folder_paths import set_output_directory
 
 
-def main(lora_name_list, text_list, save_path, batch_size, st, ed, step):
+def main(lora_name_list, text_list, save_path, batch_size, st, ed, step, lora_prefix):
     import_custom_nodes()
     loguru_logger.info("Inference...")
     lora_mp = {
@@ -206,11 +206,10 @@ def main(lora_name_list, text_list, save_path, batch_size, st, ed, step):
                     #     filename_prefix="ComfyUI", images=get_value_at_index(vaedecode_5, 0)
                     # )
                     images = get_value_at_index(vaedecode_5, 0)
-                    prefix = lora_name.split(".")[:-1]
                     batch_images = save_images(
                         save_path,
                         images,
-                        f"{''.join(prefix)}_P{text_idx}",
+                        f"{''.join(lora_prefix)}_P{text_idx}",
                     )
                     image_dict[lora_mp[lora_name]][text_idx] = batch_images[0][0]
     prefix = "".join(lora_name_list[0].split("-")[:2])
@@ -345,4 +344,4 @@ if __name__ == "__main__":
     lora_name_list.sort()
     text_list = get_prompt(prompt_file)
 
-    main(lora_name_list, text_list, save_path, batch_size, st, ed, step)
+    main(lora_name_list, text_list, save_path, batch_size, st, ed, step, lora_prefix)
