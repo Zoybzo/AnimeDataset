@@ -136,10 +136,9 @@ from folder_paths import set_output_directory
 def main(lora_name_list, text_list, save_path, batch_size, st, ed, step):
     import_custom_nodes()
     loguru_logger.info("Inference...")
-    image_dict = {
-        key1: {key2: None for key2 in range(0, len(text_list))}
-        for key1 in lora_name_list
-    }
+    keys1 = [lora_name.split("-")[-1].split(".")[0] for lora_name in lora_name_list]
+    keys2 = [idx for idx in range(0, len(text_list))]
+    image_dict = {key1: {key2: None for key2 in keys2} for key1 in keys1}
     with torch.inference_mode():
         checkpointloadersimple = NODE_CLASS_MAPPINGS["CheckpointLoaderSimple"]()
         checkpointloadersimple_1 = checkpointloadersimple.load_checkpoint(
@@ -215,12 +214,10 @@ def main(lora_name_list, text_list, save_path, batch_size, st, ed, step):
         save_path,
         f"{prefix}_{get_datetime()}_{st}_{ed}_{step}.png",
     )
-    generate_plt(image_dict, lora_name_list, text_list, figure_name)
+    generate_plt(image_dict, keys1, keys2, figure_name)
 
 
-def generate_plt(image_dict, lora_name_list, text_list, figure_name):
-    keys1 = [lora_name.split("-")[-1].split(".")[0] for lora_name in lora_name_list]
-    keys2 = [idx for idx in range(0, len(text_list))]
+def generate_plt(image_dict, keys1, keys2, figure_name):
     fig = plt.figure(figsize=(15, 10))
     gs = gridspec.GridSpec(len(keys1), len(keys2), wspace=0.05, hspace=0.05)
     # 遍历嵌套字典，将图片添加到大图中
