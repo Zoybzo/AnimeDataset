@@ -21,6 +21,8 @@ HOME = os.environ.get("HOME")
 
 def save_images(output_dir, images, filename):
     loguru_logger.info("Saving images...")
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
     for batch_number, image in enumerate(images):
         i = 255.0 * image.cpu().numpy()
         img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
@@ -211,7 +213,7 @@ def main(lora_name_list, text_list, save_path):
                     save_images(
                         save_path,
                         images,
-                        f"{lora_name.split('.')[-2].split('-')[-1]}_P{text_idx}",
+                        f"{lora_name.split('.')[-2]}_P{text_idx}",
                     )
 
 
