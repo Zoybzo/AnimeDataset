@@ -137,7 +137,9 @@ def main(lora_name_list, text_list, save_path, batch_size, st, ed, step, lora_pr
     import_custom_nodes()
     loguru_logger.info("Inference...")
     lora_mp = {
-        lora_name: lora_name.split("-")[-1].split(".")[0]
+        lora_name: lora_name.split("-")[2]
+        + "-"
+        + lora_name.split("-")[-1].split(".")[0]
         for lora_name in lora_name_list
     }
     keys1 = [lora_name.split("-")[-1].split(".")[0] for lora_name in lora_name_list]
@@ -267,26 +269,80 @@ def get_datetime():
     return datetime.now().strftime("%m%d%I%M%S")
 
 
-def get_lora_list(lora_path, lora_prefix, step_range):
+def filter_files(
+    file_list, step_range=None, date=None, id=None, model=None, dataset=None, epoch=None
+):
+    """
+    从文件列表中筛选出符合条件的文件名。
+
+    参数:
+        file_list (list): 文件名列表。
+        date (str, optional): 日期条件，格式为 "MMDD"。
+        id (str, optional): ID 条件。
+        model (str, optional): 模型名称条件。
+        dataset (str, optional): 数据集名称条件。
+        epoch (str, optional): epoch 条件。
+
+    返回:
+        list: 符合条件的文件名列表。
+    """
+    filtered_files = []
+    pattern = r"test-(\d{4})-(\d+)-([\w_.]+)-([\w_.]+)-(\d+).safetensors"
+
+    for file_name in file_list:
+        match = re.match(pattern, file_name)
+        if match:
+            file_date, file_id, file_model, file_dataset, file_epoch = match.groups()
+            if (
+                (date is None or file_date == date)
+                and (id is None or file_id == id)
+                and (model is None or file_model == model)
+                and (dataset is None or file_dataset == dataset)
+                and (epoch is None or file_epoch == epoch)
+            ):
+                filtered_files.append(file_name)
+    if id != None and epoch is None and step_range != None:
+        res = list()
+        for file_name in filtered_files:
+            step = int(file_name.split("-")[-1].split(".")[0])
+            if step in step_range:
+                res.append(file_name)
+        filtered_files = res
+    return filtered_files
+
+
+def get_lora_list(
+    lora_path, step_range=None, date=None, id=None, model=None, dataset=None, epoch=None
+):
     loguru_logger.info(f"Lora path: {lora_path}")
     loguru_logger.info(f"Lora prefix: {lora_prefix}")
 
-    pattern = re.compile(rf"{lora_prefix}-.*-(\d+)\.safetensors$")
+    # pattern = re.compile(rf"{lora_prefix}-.*-(\d+)\.safetensors$")
 
     # Loras
     # 筛选符合条件的文件路径
     selected_files = []
-    for filename in os.listdir(lora_path):
-        match = pattern.match(filename)
-        if match:
-            step_str = match.group(1)
-            try:
-                step = int(step_str)
-                if step in step_range:
-                    # selected_files.append(os.path.join(lora_path, filename))
-                    selected_files.append(filename)
-            except ValueError:
-                continue
+    filename_list = os.listdir(lora_path)
+    selected_files = filter_files(
+        filename_list,
+        step_range=step_range,
+        date=date,
+        id=id,
+        model=model,
+        dataset=dataset,
+        epoch=epoch,
+    )
+    # for filename in os.listdir(lora_path):
+    #     match = pattern.match(filename)
+    #     if match:
+    #         step_str = match.group(1)
+    #         try:
+    #             step = int(step_str)
+    #             if step in step_range:
+    #                 # selected_files.append(os.path.join(lora_path, filename))
+    #                 selected_files.append(filename)
+    #         except ValueError:
+    #             continue
     # 打印结果
     loguru_logger.info("Selected files:")
     for file_path in selected_files:
@@ -315,12 +371,20 @@ def parse_args():
     parser.add_argument("--lora_prefix", default="test-0331-38")
     parser.add_argument("--device", default="cuda:2")
     parser.add_argument("--dtype", default="float16")
-    parser.add_argument("--step", default=10)
-    parser.add_argument("--start", default=0)
-    parser.add_argument("--end", default=51)
     parser.add_argument("--prompt_file", default="prompts.toml")
     parser.add_argument("--save_path", default=f"{MODEL_HOME}/kohya_samples")
     parser.add_argument("--batch_size", default=1)
+
+    # lora_path, step_range=None, date=None, id=None, model=None, dataset=None, epoch=None
+    parser.add_argument("--step", default=10)
+    parser.add_argument("--start", default=0)
+    parser.add_argument("--end", default=51)
+    parser.add_argument("--date", default=None)
+    parser.add_argument("--model", default="sdxl_base_1.0")
+    parser.add_argument("--id", default=None)
+    parser.add_argument("--dataset", default=None)
+    parser.add_argument("--epoch", default=None)
+
     return parser.parse_args()
 
 
@@ -340,7 +404,10 @@ if __name__ == "__main__":
     lora_prefix = f"{args.lora_prefix}"
     step_range = range(st, ed, step)
 
-    lora_name_list = get_lora_list(lora_path, lora_prefix, step_range)
+    lora_name_list = get_lora_list(
+        lora_path,
+        step_range,
+    )
     lora_name_list.sort()
     text_list = get_prompt(prompt_file)
 
