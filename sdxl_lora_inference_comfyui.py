@@ -1,6 +1,6 @@
 import os
 import argparse
-import loguru
+from datetime import datetime
 import toml
 import re
 import random
@@ -26,7 +26,7 @@ def save_images(output_dir, images, filename):
     for batch_number, image in enumerate(images):
         i = 255.0 * image.cpu().numpy()
         img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
-        file = f"{filename}_{batch_number}.png"
+        file = f"{filename}_{batch_number}_{datetime.now().strftime("%m%d%I%M%S")}.png"
         img.save(
             os.path.join(output_dir, file),
         )
