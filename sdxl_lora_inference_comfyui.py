@@ -7,7 +7,12 @@ import sys
 import torch
 from typing import Sequence, Mapping, Any, Union
 
-from utils.get_path import COMFYUI_PATH, MODEL_HOME
+COMFYUI_PATH = os.environ.get("COMFYUI_PATH")
+
+MODEL_HOME = os.environ.get("MODEL_HOME")
+DATASET_HOME = os.environ.get("DATASET_HOME")
+
+HOME = os.environ.get("HOME")
 
 
 def save_images(output_dir, image, filename):
@@ -97,7 +102,7 @@ def add_extra_model_paths() -> None:
 
 
 add_comfyui_directory_to_sys_path()
-add_extra_model_paths()
+# add_extra_model_paths()
 
 
 def import_custom_nodes() -> None:
