@@ -272,10 +272,10 @@ if __name__ == "__main__":
     prompt_file = args.prompt_file
     save_path = args.save_path
 
-    lora_prefix = f"test-{args.lora_prefix}"
+    lora_prefix = f"{args.lora_prefix}"
     step_range = range(10, 51, step)
 
-    lora_name_list = get_lora_list(step_range)
+    lora_name_list = get_lora_list(lora_path, lora_prefix, step_range)
     text_list = get_prompt(prompt_file)
 
     main(lora_name_list, text_list, save_path)
