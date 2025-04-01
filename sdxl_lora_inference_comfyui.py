@@ -138,7 +138,7 @@ def main(lora_name_list, text_list, save_path, batch_size):
     loguru_logger.info("Inference...")
     image_dict = {
         key1: {key2: None for key2 in range(0, len(text_list))}
-        for key1 in range(0, len(lora_name_list))
+        for key1 in lora_name_list
     }
     with torch.inference_mode():
         checkpointloadersimple = NODE_CLASS_MAPPINGS["CheckpointLoaderSimple"]()
