@@ -404,6 +404,11 @@ if __name__ == "__main__":
     save_path = args.save_path
     batch_size = args.batch_size
     st, ed = args.start, args.end
+    date = args.date
+    model = args.model
+    id = args.id
+    dataset = args.dataset
+    epoch = args.epoch
 
     lora_prefix = f"{args.lora_prefix}"
     step_range = range(st, ed, step)
@@ -411,6 +416,11 @@ if __name__ == "__main__":
     lora_name_list = get_lora_list(
         lora_path,
         step_range,
+        date=date,
+        model=model,
+        id=id,
+        dataset=dataset,
+        epoch=epoch,
     )
     lora_name_list.sort()
     text_list = get_prompt(prompt_file)
