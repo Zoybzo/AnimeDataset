@@ -1,19 +1,27 @@
 # prompts.toml
 prompts = [
-# default
-  "kafka,star rail, 1girl, solo, long hair, breasts, looking at viewer, smile, bangs, shirt, hair between eyes, jewelry, closed mouth, purple eyes, jacket, white shirt, purple hair, earrings, glasses, black jacket, sunglasses, eyewear on head, single earring, polo shirt, sensitive, masterpiece, best quality, newest, absurdres, highres, safe,",
-  "kafka,star rail, 1girl, solo, long hair, looking at viewer, smile, bangs, shirt, hair between eyes, jewelry, closed mouth, purple eyes, jacket, white shirt, purple hair, earrings, pink eyes, black jacket, sunglasses, eyewear on head, general, masterpiece, best quality, newest, absurdres, highres, safe,",
-  "kafka,star rail, 1girl, solo, long hair, breasts, looking at viewer, smile, bangs, simple background, shirt, gloves, long sleeves, jewelry, sitting, closed mouth, purple eyes, jacket, full body, white shirt, purple hair, pantyhose, earrings, boots, black footwear, coat, black jacket, sunglasses, crossed legs, black background, eyewear on head, single glove, single earring, sensitive, masterpiece, best quality, newest, absurdres, highres, safe,",
+# default 
+"kafka, star rail, 1girl, solo, eyewear on head, purple hair, purple eyes, bangs, jacket, closed mouth, looking at viewer, smile, earrings, jewelry, sunglasses, shirt, long hair, white shirt, black jacket, breasts, upper body, hair between eyes",
+"kafka, star rail, 1girl, solo, gloves, necktie, shirt, jacket, pants, eyewear on head, black necktie, purple hair, long hair, black gloves, looking at viewer, white background, purple eyes, jacket on shoulders, sunglasses, earrings, jewelry, white shirt, smile, breasts, suspenders, black pants, long sleeves, bangs, collared shirt, simple background, high-waist pants, open mouth, belt, cowboy shot, formal, black jacket, holding clothes",
+"kafka, star rail, 1girl, eyewear on head, solo, breasts, shirt, looking at viewer, sunglasses, long hair, earrings, smile, jewelry, jacket, large breasts, white shirt, purple eyes, purple hair, bangs, collared shirt, long sleeves, closed mouth, pants",
 # kafka with clothes
-  "kafka, star rail, 1girl, solo, gloves, jacket, smile, purple gloves, shirt, closed mouth, looking at viewer, blue background, black jacket, finger to mouth, collared shirt, shushing, white shirt, index finger raised, round eyewear, masterpiece, best quality, newest, absurdres, highres, safe,",
-  "kafka, star rail, 1girl, holding, weapon, dual wielding, holding weapon, gun, jacket, solo, full body, submachine gun, shirt, gloves, long sleeves, holding gun, white shirt, black shorts, closed mouth, black footwear, looking at viewer, shorts, black jacket, pantyhose, purple gloves, boots, breasts, handgun, masterpiece, best quality, newest, absurdres, highres, safe,",
-  "kafka, star rail, 1girl, solo, looking at viewer, closed mouth, portrait, shirt, jacket, white shirt, masterpiece, best quality, newest, absurdres, highres, safe,",
+"kafka, star rail, 1girl, solo, closed mouth, looking at viewer, smile, upper body",
+"kafka, star rail, 1girl, solo, gloves, necktie, shirt, jacket, pants, black necktie, black gloves, looking at viewer, white background, jacket on shoulders, white shirt, smile, breasts, suspenders, black pants, long sleeves, collared shirt, simple background, high-waist pants, open mouth, belt, cowboy shot, formal, black jacket, holding clothes",
+"kafka, star rail, 1girl, eyewear on head, solo, breasts, shirt, looking at viewer, sunglasses, earrings, smile, jewelry, jacket, large breasts, white shirt, bangs, collared shirt, long sleeves, closed mouth, pants",
 # only kafka
-  "kafka, star rail, 1girl, solo, smile, looking at viewer, closed mouth, portrait, masterpiece, best quality, newest, absurdres, highres, safe,",
-  "kafka, star rail, 1girl, holding, weapon, dual wielding, holding weapon, gun, solo, full body, submachine gun, holding gun, closed mouth, looking at viewer, handgun, masterpiece, best quality, newest, absurdres, highres, safe,",
-  "kafka, star rail, 1girl, solo, looking at viewer, closed mouth, portrait, masterpiece, best quality, newest, absurdres, highres, safe,",
-# validate
-  "kafka,star rail, 1girl, solo, long hair, breasts, looking at viewer, smile, bangs, skirt, large breasts, simple background, shirt, long sleeves, white background, hair between eyes, closed mouth, purple eyes, jacket, white shirt, upper body, pink hair, purple hair, collared shirt, hand up, black skirt, pink eyes, nail polish, coat, sunglasses, eyewear on head, black coat, round eyewear, sensitive",
-  "kafka,star rail, 1girl, solo, looking at viewer, smile, bangs, skirt, simple background, shirt, long sleeves, white background, closed mouth, jacket, white shirt, upper body, collared shirt, hand up, black skirt, nail polish, coat, sunglasses, eyewear on head, black coat, round eyewear, sensitive",
-  "kafka,star rail, 1girl, solo, looking at viewer, smile, simple background, white background, closed mouth, upper body, hand up, sensitive",
+"kafka, star rail, 1girl, solo, closed mouth, looking at viewer, smile, upper body",
+"kafka, star rail, 1girl, solo, looking at viewer, white background, smile, simple background, open mouth, formal, holding clothes",
+"kafka, star rail, 1girl, solo, looking at viewer, smile, closed mouth",
+# # kafka with clothes
+#   "kafka, star rail, 1girl, solo, gloves, jacket, smile, purple gloves, shirt, closed mouth, looking at viewer, blue background, black jacket, finger to mouth, collared shirt, shushing, white shirt, index finger raised, round eyewear, masterpiece, best quality, newest, absurdres, highres, safe,",
+#   "kafka, star rail, 1girl, holding, weapon, dual wielding, holding weapon, gun, jacket, solo, full body, submachine gun, shirt, gloves, long sleeves, holding gun, white shirt, black shorts, closed mouth, black footwear, looking at viewer, shorts, black jacket, pantyhose, purple gloves, boots, breasts, handgun, masterpiece, best quality, newest, absurdres, highres, safe,",
+#   "kafka, star rail, 1girl, solo, looking at viewer, closed mouth, portrait, shirt, jacket, white shirt, masterpiece, best quality, newest, absurdres, highres, safe,",
+# # only kafka
+#   "kafka, star rail, 1girl, solo, smile, looking at viewer, closed mouth, portrait, masterpiece, best quality, newest, absurdres, highres, safe,",
+#   "kafka, star rail, 1girl, holding, weapon, dual wielding, holding weapon, gun, solo, full body, submachine gun, holding gun, closed mouth, looking at viewer, handgun, masterpiece, best quality, newest, absurdres, highres, safe,",
+#   "kafka, star rail, 1girl, solo, looking at viewer, closed mouth, portrait, masterpiece, best quality, newest, absurdres, highres, safe,",
+# # validate
+#   "kafka,star rail, 1girl, solo, long hair, breasts, looking at viewer, smile, bangs, skirt, large breasts, simple background, shirt, long sleeves, white background, hair between eyes, closed mouth, purple eyes, jacket, white shirt, upper body, pink hair, purple hair, collared shirt, hand up, black skirt, pink eyes, nail polish, coat, sunglasses, eyewear on head, black coat, round eyewear, sensitive",
+#   "kafka,star rail, 1girl, solo, looking at viewer, smile, bangs, skirt, simple background, shirt, long sleeves, white background, closed mouth, jacket, white shirt, upper body, collared shirt, hand up, black skirt, nail polish, coat, sunglasses, eyewear on head, black coat, round eyewear, sensitive",
+#   "kafka,star rail, 1girl, solo, looking at viewer, smile, simple background, white background, closed mouth, upper body, hand up, sensitive",
 ]
