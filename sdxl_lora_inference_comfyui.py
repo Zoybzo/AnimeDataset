@@ -1,5 +1,6 @@
 import os
 import argparse
+import loguru
 import toml
 import re
 import random
@@ -220,7 +221,10 @@ def parse_args():
     return parser.parse_args()
 
 
-def get_lora_list(step_range):
+def get_lora_list(lora_path, lora_prefix, step_range):
+    loguru_logger.info(f"Lora path: {lora_path}")
+    loguru_logger.info(f"Lora prefix: {lora_prefix}")
+
     pattern = re.compile(rf"{lora_prefix}-.*-(\d+)\.safetensors$")
 
     # Loras
