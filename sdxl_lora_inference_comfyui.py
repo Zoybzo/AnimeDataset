@@ -98,12 +98,12 @@ def add_extra_model_paths() -> None:
     Parse the optional extra_model_paths.yaml file and add the parsed paths to the sys.path.
     """
     try:
-        from ComfyUI.main import load_extra_path_config
+        from main import load_extra_path_config
     except ImportError:
         print(
             "Could not import load_extra_path_config from main.py. Looking in utils.extra_config instead."
         )
-        from ComfyUI.utils.extra_config import load_extra_path_config
+        from utils.extra_config import load_extra_path_config
 
     extra_model_paths = find_path("extra_model_paths.yaml")
 
@@ -213,7 +213,7 @@ def main(lora_name_list, text_list, save_path):
                     save_images(
                         save_path,
                         images,
-                        f"{lora_name.split('.')[-2]}_P{text_idx}",
+                        f"{"".join(lora_name.split('.')[:-1])}_P{text_idx}",
                     )
 
 
