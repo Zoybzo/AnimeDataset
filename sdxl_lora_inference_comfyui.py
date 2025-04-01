@@ -6,6 +6,7 @@ import random
 import sys
 import torch
 from typing import Sequence, Mapping, Any, Union
+from loguru import logger as loguru_logger
 
 COMFYUI_PATH = os.environ.get("COMFYUI_PATH")
 
@@ -16,6 +17,7 @@ HOME = os.environ.get("HOME")
 
 
 def save_images(output_dir, image, filename):
+    loguru_logger.info("Saving images...")
     image_path = os.path.join(output_dir, filename)
     image.save(image_path)
 
@@ -134,6 +136,7 @@ from folder_paths import set_output_directory
 
 def main(lora_name_list, text_list, save_path):
     import_custom_nodes()
+    loguru_logger.info("Inference...")
     with torch.inference_mode():
         checkpointloadersimple = NODE_CLASS_MAPPINGS["CheckpointLoaderSimple"]()
         checkpointloadersimple_1 = checkpointloadersimple.load_checkpoint(
@@ -208,7 +211,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_path", default="stable-diffusion-xl-base-1.0")
     parser.add_argument("--lora_path", default=f"{MODEL_HOME}/kohya_ss")
-    parser.add_argument("--lora_prefix")
+    parser.add_argument("--lora_prefix", default="test-0331-38")
     parser.add_argument("--device", default="cuda:2")
     parser.add_argument("--dtype", default="float16")
     parser.add_argument("--step", default=10)
@@ -234,7 +237,7 @@ def get_lora_list(step_range):
             except ValueError:
                 continue
     # 打印结果
-    print("Selected files:")
+    loguru_logger.info("Selected files:")
     for file_path in selected_files:
         print(file_path)
 
@@ -248,7 +251,7 @@ def get_prompt(prompt_file):
     # 获取 prompt 列表
     prompts = data.get("prompts", [])
     # 打印 prompt 列表
-    print("读取的 prompt 列表:")
+    loguru_logger.info("读取的 prompt 列表:")
     for i, prompt in enumerate(prompts, 1):
         print(f"{i}. {prompt}")
     return prompts
