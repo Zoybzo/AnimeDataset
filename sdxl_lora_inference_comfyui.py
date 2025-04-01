@@ -133,7 +133,7 @@ from nodes import NODE_CLASS_MAPPINGS
 from folder_paths import set_output_directory
 
 
-def main(lora_name_list, text_list, save_path, batch_size):
+def main(lora_name_list, text_list, save_path, batch_size, st, ed, step):
     import_custom_nodes()
     loguru_logger.info("Inference...")
     image_dict = {
@@ -213,13 +213,13 @@ def main(lora_name_list, text_list, save_path, batch_size):
     prefix = "".join(lora_name_list[0].split("-")[:2])
     figure_name = os.path.join(
         save_path,
-        f"{prefix}_{get_datetime()}.png",
+        f"{prefix}_{get_datetime()}_{st}_{ed}_{step}.png",
     )
     generate_plt(image_dict, lora_name_list, text_list, figure_name)
 
 
 def generate_plt(image_dict, lora_name_list, text_list, figure_name):
-    keys1 = lora_name_list
+    keys1 = [lora_name.split("-")[-1].split(".")[0] for lora_name in lora_name_list]
     keys2 = [idx for idx in range(0, len(text_list))]
     fig = plt.figure(figsize=(15, 10))
     gs = gridspec.GridSpec(len(keys1), len(keys2), wspace=0.05, hspace=0.05)
@@ -316,6 +316,8 @@ def parse_args():
     parser.add_argument("--device", default="cuda:2")
     parser.add_argument("--dtype", default="float16")
     parser.add_argument("--step", default=10)
+    parser.add_argument("--start", default=0)
+    parser.add_argument("--end", default=51)
     parser.add_argument("--prompt_file", default="prompts.toml")
     parser.add_argument("--save_path", default=f"{MODEL_HOME}/kohya_samples")
     parser.add_argument("--batch_size", default=1)
@@ -333,12 +335,13 @@ if __name__ == "__main__":
     prompt_file = args.prompt_file
     save_path = args.save_path
     batch_size = args.batch_size
+    st, ed = args.start, args.end
 
     lora_prefix = f"{args.lora_prefix}"
-    step_range = range(10, 51, step)
+    step_range = range(st, ed, step)
 
     lora_name_list = get_lora_list(lora_path, lora_prefix, step_range)
     lora_name_list.sort()
     text_list = get_prompt(prompt_file)
 
-    main(lora_name_list, text_list, save_path, batch_size)
+    main(lora_name_list, text_list, save_path, batch_size, st, ed, step)
