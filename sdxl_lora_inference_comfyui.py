@@ -210,10 +210,11 @@ def main(lora_name_list, text_list, save_path):
                     #     filename_prefix="ComfyUI", images=get_value_at_index(vaedecode_5, 0)
                     # )
                     images = get_value_at_index(vaedecode_5, 0)
+                    prefix = lora_name.split(".")[:-1]
                     save_images(
                         save_path,
                         images,
-                        f"{"".join(lora_name.split('.')[:-1])}_P{text_idx}",
+                        f"{"".join(prefix)}_P{text_idx}",
                     )
 
 
