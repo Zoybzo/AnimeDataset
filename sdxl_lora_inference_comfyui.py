@@ -212,10 +212,10 @@ def main(lora_name_list, text_list, save_path, batch_size, st, ed, step, lora_pr
                         f"{''.join(lora_prefix)}_P{text_idx}",
                     )
                     image_dict[lora_mp[lora_name]][text_idx] = batch_images[0][0]
-    prefix = "".join(lora_name_list[0].split("-")[:2])
+    # prefix = "".join(lora_name_list[0].split("-")[:2])
     figure_name = os.path.join(
         save_path,
-        f"{prefix}_{get_datetime()}_{st}_{ed}_{step}.png",
+        f"{lora_prefix}_{get_datetime()}_{st}_{ed}_{step}.png",
     )
     generate_plt(image_dict, keys1, keys2, figure_name)
 
