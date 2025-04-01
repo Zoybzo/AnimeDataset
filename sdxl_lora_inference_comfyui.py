@@ -383,11 +383,11 @@ def parse_args():
     parser.add_argument("--step", default=10)
     parser.add_argument("--start", default=0)
     parser.add_argument("--end", default=51)
-    parser.add_argument("--date", default=None)
+    parser.add_argument("--date", default=None, type=str)
     parser.add_argument("--model", default="sdxl_base_1.0")
-    parser.add_argument("--id", default=None)
+    parser.add_argument("--id", default=None, type=str)
     parser.add_argument("--dataset", default=None)
-    parser.add_argument("--epoch", default=None)
+    parser.add_argument("--epoch", default=None, type=str)
 
     return parser.parse_args()
 
