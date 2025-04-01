@@ -237,7 +237,8 @@ def get_lora_list(lora_path, lora_prefix, step_range):
             try:
                 step = int(step_str)
                 if step in step_range:
-                    selected_files.append(os.path.join(lora_path, filename))
+                    # selected_files.append(os.path.join(lora_path, filename))
+                    selected_files.append(filename)
             except ValueError:
                 continue
     # 打印结果
