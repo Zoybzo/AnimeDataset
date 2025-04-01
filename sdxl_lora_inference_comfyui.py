@@ -9,6 +9,8 @@ import torch
 import numpy as np
 from PIL import Image
 from typing import Sequence, Mapping, Any, Union
+import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
 from loguru import logger as loguru_logger
 
 COMFYUI_PATH = os.environ.get("COMFYUI_PATH")
@@ -17,19 +19,6 @@ MODEL_HOME = os.environ.get("MODEL_HOME")
 DATASET_HOME = os.environ.get("DATASET_HOME")
 
 HOME = os.environ.get("HOME")
-
-
-def save_images(output_dir, images, filename):
-    loguru_logger.info("Saving images...")
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-    for batch_number, image in enumerate(images):
-        i = 255.0 * image.cpu().numpy()
-        img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
-        file = f"{filename}_{batch_number}_{datetime.now().strftime('%m%d%I%M%S')}.png"
-        img.save(
-            os.path.join(output_dir, file),
-        )
 
 
 def get_value_at_index(obj: Union[Sequence, Mapping], index: int) -> Any:
@@ -144,9 +133,13 @@ from nodes import NODE_CLASS_MAPPINGS
 from folder_paths import set_output_directory
 
 
-def main(lora_name_list, text_list, save_path):
+def main(lora_name_list, text_list, save_path, batch_size):
     import_custom_nodes()
     loguru_logger.info("Inference...")
+    image_dict = {
+        key1: {key2: None for key2 in range(0, len(text_list))}
+        for key1 in range(0, len(lora_name_list))
+    }
     with torch.inference_mode():
         checkpointloadersimple = NODE_CLASS_MAPPINGS["CheckpointLoaderSimple"]()
         checkpointloadersimple_1 = checkpointloadersimple.load_checkpoint(
@@ -154,7 +147,7 @@ def main(lora_name_list, text_list, save_path):
         )
         emptylatentimage = NODE_CLASS_MAPPINGS["EmptyLatentImage"]()
         emptylatentimage_7 = emptylatentimage.generate(
-            width=1024, height=1024, batch_size=1
+            width=1024, height=1024, batch_size=batch_size
         )
 
         ksampleradvanced = NODE_CLASS_MAPPINGS["KSamplerAdvanced"]()
@@ -211,24 +204,67 @@ def main(lora_name_list, text_list, save_path):
                     # )
                     images = get_value_at_index(vaedecode_5, 0)
                     prefix = lora_name.split(".")[:-1]
-                    save_images(
+                    batch_images = save_images(
                         save_path,
                         images,
                         f"{''.join(prefix)}_P{text_idx}",
                     )
+                    image_dict[lora_name][text_idx] = batch_images[0][0]
+    prefix = "".join(lora_name_list[0].split("-")[:2])
+    figure_name = os.path.join(
+        save_path,
+        f"{prefix}_{get_datetime()}.png",
+    )
+    generate_plt(image_dict, lora_name_list, text_list, figure_name)
 
 
-def parse_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--model_path", default="stable-diffusion-xl-base-1.0")
-    parser.add_argument("--lora_path", default=f"{MODEL_HOME}/kohya_ss")
-    parser.add_argument("--lora_prefix", default="test-0331-38")
-    parser.add_argument("--device", default="cuda:2")
-    parser.add_argument("--dtype", default="float16")
-    parser.add_argument("--step", default=10)
-    parser.add_argument("--prompt_file", default="prompts.toml")
-    parser.add_argument("--save_path", default=f"{MODEL_HOME}/kohya_samples")
-    return parser.parse_args()
+def generate_plt(image_dict, lora_name_list, text_list, figure_name):
+    keys1 = lora_name_list
+    keys2 = [idx for idx in range(0, len(text_list))]
+    fig = plt.figure(figsize=(15, 10))
+    gs = gridspec.GridSpec(len(keys1), len(keys2), wspace=0.05, hspace=0.05)
+    # 遍历嵌套字典，将图片添加到大图中
+    for i, key1 in enumerate(keys1):
+        for j, key2 in enumerate(keys2):
+            ax = plt.subplot(gs[i, j])
+            image = image_dict[key1][key2]
+            ax.imshow(image)
+            ax.set_xticklabels([])
+            ax.set_yticklabels([])
+            ax.tick_params(axis="both", length=0)
+
+            # 添加标题（仅在第一行显示 key2）
+            if i == 0:
+                ax.set_title(f"{key2}", fontsize=10)
+
+            # 添加纵轴标签（仅在第一列显示 key1）
+            if j == 0:
+                ax.set_ylabel(f"{key1}", fontsize=10)
+
+    # 保存大图
+    plt.tight_layout()
+    plt.savefig(figure_name, dpi=300, bbox_inches="tight")
+    loguru_logger.info(f"Saved large image: {figure_name}")
+    pass
+
+
+def save_images(output_dir, images, filename):
+    loguru_logger.info("Saving images...")
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    batch_images = list()
+    for batch_number, image in enumerate(images):
+        i = 255.0 * image.cpu().numpy()
+        img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
+        file = f"{filename}_{batch_number}_{get_datetime()}.png"
+        img_path = os.path.join(output_dir, file)
+        img.save(img_path)
+        batch_images.append([img, img_path])
+    return batch_images
+
+
+def get_datetime():
+    return datetime.now().strftime("%m%d%I%M%S")
 
 
 def get_lora_list(lora_path, lora_prefix, step_range):
@@ -272,6 +308,20 @@ def get_prompt(prompt_file):
     return prompts
 
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model_path", default="stable-diffusion-xl-base-1.0")
+    parser.add_argument("--lora_path", default=f"{MODEL_HOME}/kohya_ss")
+    parser.add_argument("--lora_prefix", default="test-0331-38")
+    parser.add_argument("--device", default="cuda:2")
+    parser.add_argument("--dtype", default="float16")
+    parser.add_argument("--step", default=10)
+    parser.add_argument("--prompt_file", default="prompts.toml")
+    parser.add_argument("--save_path", default=f"{MODEL_HOME}/kohya_samples")
+    parser.add_argument("--batch_size", default=1)
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
     args = parse_args()
     model_path = args.model_path
@@ -282,11 +332,13 @@ if __name__ == "__main__":
     step = args.step
     prompt_file = args.prompt_file
     save_path = args.save_path
+    batch_size = args.batch_size
 
     lora_prefix = f"{args.lora_prefix}"
     step_range = range(10, 51, step)
 
     lora_name_list = get_lora_list(lora_path, lora_prefix, step_range)
+    lora_name_list.sort()
     text_list = get_prompt(prompt_file)
 
-    main(lora_name_list, text_list, save_path)
+    main(lora_name_list, text_list, save_path, batch_size)
