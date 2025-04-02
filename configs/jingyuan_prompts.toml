@@ -1,0 +1,6 @@
+# prompts.toml
+prompts = [
+"jingyuan, solo, looking_at_viewer, smile, long_hair,  bangs, simple_background, 1boy, closed_mouth, yellow_eyes, upper_body, ponytail, ahoge, grey_hair, male_focus, armor, mole, hair_over_one_eye, mole_under_eye, chinese_clothes, black_background, scroll.",
+"jingyuan, solo, looking_at_viewer, smile, simple_background, 1boy, closed_mouth, upper_body, ponytail, ahoge, male_focus, armor, chinese_clothes, black_background, scroll.",
+"jingyuan, solo, looking_at_viewer, smile, simple_background, 1boy, closed_mouth, upper_body, ahoge, male_focus, black_background, scroll.",
+]

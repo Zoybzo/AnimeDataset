@@ -375,9 +375,11 @@ def parse_args():
     parser.add_argument("--lora_prefix", default="test-0331-38")
     parser.add_argument("--device", default="cuda:2")
     parser.add_argument("--dtype", default="float16")
-    parser.add_argument("--prompt_file", default="prompts.toml")
+    parser.add_argument("--prompt_file", default=None)
     parser.add_argument("--save_path", default=f"{MODEL_HOME}/kohya_samples")
     parser.add_argument("--batch_size", default=1)
+
+    parser.add_argument("--char", default="kafka")
 
     # lora_path, step_range=None, date=None, id=None, model=None, dataset=None, epoch=None
     parser.add_argument("--step", default=10)
@@ -409,6 +411,7 @@ if __name__ == "__main__":
     id = args.id
     dataset = args.dataset
     epoch = args.epoch
+    char = args.char
 
     # lora_prefix = f"{args.lora_prefix}"
     lora_prefix = ""
@@ -433,6 +436,9 @@ if __name__ == "__main__":
         epoch=epoch,
     )
     lora_name_list.sort()
+
+    if prompt_file is None:
+        prompt_file = f"{char}_prompts.toml"
     text_list = get_prompt(prompt_file)
 
     main(lora_name_list, text_list, save_path, batch_size, st, ed, step, lora_prefix)
