@@ -215,7 +215,7 @@ def main(lora_name_list, text_list, save_path, batch_size, st, ed, step, lora_pr
                     batch_images = save_images(
                         save_path,
                         images,
-                        f"{''.join(lora_prefix)}_P{text_idx}",
+                        f"{''.join(lora_name)}_P{text_idx}",
                     )
                     image_dict[lora_mp[lora_name]][text_idx] = batch_images[0][0]
     # prefix = "".join(lora_name_list[0].split("-")[:2])
