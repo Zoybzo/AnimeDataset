@@ -1,0 +1,13 @@
+# prompts.toml
+prompts = [
+# default 
+"kafka, star rail, 1girl, solo, red qipao, floral embroidery, thigh slit, holding fan, leaning forward, high heels, gold accessories, lotus hairpin, smokey eye makeup, white background, dynamic pose, wind-blown hair, looking sideways, cherry blossom petals",
+"kafka, star rail, 1girl, solo, cyberpunk bodysuit, neon lighting, hologram visor, kneeling pose, charging weapon, glowing circuits, mechanical arm, futuristic cables, blue energy particles, dynamic angle, dark metallic background, determined expression",
+"kafka, star rail, 1girl, solo, victorian gown, lace parasol, sitting on clockwork chair, pouring tea, steam pipes, brass goggles, corset details, pocket watch necklace, layered skirts, ornate background, golden cogwheel motifs, mysterious smile",
+"kafka, star rail, 1girl, solo, tactical combat gear, aiming sniper rifle, night vision goggles, camouflage pattern, bulletproof vest, knee pads, combat boots, moonlight illumination, rooftop setting, wind-blown hair, focused expression, shell casings",
+"kafka, star rail, 1girl, solo, mermaid dress, underwater scene, holding trident, glowing scales, flowing aqua hair, coral reef background, bubbles rising, pearl accessories, translucent fabric, dynamic swimming pose, bioluminescent effects",
+"kafka, star rail, 1girl, solo, astronaut suit, floating in space, holding helmet, earth reflection in visor, zero gravity hair, space station background, starfield, glowing control panel, safety tethers, weightless fabric movement",
+"kafka, star rail, 1girl, solo, chef uniform, tossing pizza dough, flour splashes, checkered headscarf, tomato sauce stains, commercial kitchen background, laughing expression, apron strings, dynamic cooking action, flying ingredients",
+"kafka, star rail, 1girl, solo, ballet tutu, en pointe position, stage spotlight, rose petals falling, satin ribbons, theater curtain background, graceful arm movement, sweat droplets, dramatic shadow, flying hair bun",
+"kafka, star rail, 1girl, solo, detective trenchcoat, magnifying glass, examining clues, rainy street background, neon signs reflection, fedora hat, leather gloves, notebook in hand, mysterious shadow, wet pavement, cigarette smoke",
+]
